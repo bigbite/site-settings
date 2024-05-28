@@ -21,17 +21,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 function bb_site_settings_admin_scripts() {
 	$asset_file = include plugin_dir_path( __FILE__ ) . 'build/index.asset.php';
 
-	// Enqueue CSS dependencies.
-	foreach ( $asset_file['dependencies'] as $style ) {
-		wp_enqueue_style( $style );
-	}
+	$dependencies = array_merge( $asset_file['dependencies'], [ 'wp-api' ] );
+	$version      = $asset_file['version'];
 
 	// Load our app.js.
 	wp_register_script(
 		'nss-site-settings',
 		plugins_url( 'build/index.js', __FILE__ ),
-		$asset_file['dependencies'],
-		$asset_file['version'],
+		$dependencies,
+		$version,
 		false
 	);
 
@@ -41,8 +39,8 @@ function bb_site_settings_admin_scripts() {
 	wp_register_style(
 		'nss-site-settings',
 		plugins_url( 'build/style-index.css', __FILE__ ),
-		array(),
-		$asset_file['version']
+		[],
+		$version
 	);
 
 	wp_enqueue_style( 'nss-site-settings' );
