@@ -31,3 +31,6 @@ node_modules/
 
 # composer files
 vendor/
+
+# build files
+build/
