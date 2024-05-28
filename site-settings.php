@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Enqueue styles for site settings.
  */
 function bb_site_settings_enqueue_styles() {
-	wp_enqueue_style( 'site-settings-styles', get_theme_file_uri() . '/build/index.css' );
+	wp_enqueue_style( 'site-settings-styles', get_theme_file_uri() . '/build/index.css', [], '0.0.1' );
 }
 
 add_action( 'admin_enqueue_scripts', 'bb_site_settings_enqueue_styles' );
