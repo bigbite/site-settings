@@ -3,6 +3,7 @@
 	"version": "0.1.0",
 	"description": "Example block scaffolded with Create Block tool.",
 	"author": "The WordPress Contributors",
+	"prettier": "@bigbite/build-tools/configs/prettier",
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",
 	"scripts": {
@@ -10,11 +11,14 @@
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
+		"lint:php": "./vendor/bin/phpcs --ignore=build/ .",
+    	"lint:php:fix": "./vendor/bin/phpcbf --ignore=build/ .",
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start": "wp-scripts start"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^27.9.0"
+		"@wordpress/scripts": "^27.9.0",
+		"@bigbite/build-tools": "^1.3.1"
 	}
 }
