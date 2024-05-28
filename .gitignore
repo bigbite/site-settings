@@ -31,3 +31,8 @@ node_modules/
 
 # composer files
 vendor/
+
+# build output
+build/
+
+.DS_Store

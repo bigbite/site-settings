@@ -1,3 +1,6 @@
+import domReady from "@wordpress/dom-ready";
+import { createRoot } from "@wordpress/element";
+
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
  * All files containing `style` keyword are bundled together. The code used
@@ -6,3 +9,9 @@
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import "./style.scss";
+import NSSSiteSettings from "./NSSSiteSettings";
+
+domReady(() => {
+	const root = createRoot(document.getElementById("nss-site-settings"));
+	root.render(<NSSSiteSettings />);
+});

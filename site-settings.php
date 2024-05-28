@@ -8,19 +8,62 @@
  * Author:            Big Bite
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       site-settings
+ * Text Domain:       nss-site-settings
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-
 /**
- * Enqueue styles for site settings.
+ * Enqueue scripts for site settings.
  */
-function bb_site_settings_enqueue_styles() {
-	wp_enqueue_style( 'site-settings-styles', get_theme_file_uri() . '/build/index.css' );
+function bb_site_settings_admin_scripts() {
+	$asset_file = include plugin_dir_path( __FILE__ ) . 'build/index.asset.php';
+
+	// Enqueue CSS dependencies.
+	foreach ( $asset_file['dependencies'] as $style ) {
+		wp_enqueue_style( $style );
+	}
+
+	// Load our app.js.
+	wp_register_script(
+		'nss-site-settings',
+		plugins_url( 'build/index.js', __FILE__ ),
+		$asset_file['dependencies'],
+		$asset_file['version'],
+		false
+	);
+
+	wp_enqueue_script( 'nss-site-settings' );
+
+	// Load our style.css.
+	wp_register_style(
+		'nss-site-settings',
+		plugins_url( 'build/style-index.css', __FILE__ ),
+		array(),
+		$asset_file['version']
+	);
+
+	wp_enqueue_style( 'nss-site-settings' );
 }
 
-add_action( 'admin_enqueue_scripts', 'bb_site_settings_enqueue_styles' );
+/**
+ * Add admin menu for site settings.
+ */
+function bb_site_settings_admin_menu() {
+	add_menu_page(
+		__( 'Site Settings', 'nss-site-settings' ),
+		__( 'Site Settings', 'nss-site-settings' ),
+		'manage_options',
+		'nss-site-settings',
+		function () {
+			echo '<div id="nss-site-settings"></div>';
+		},
+		'dashicons-admin-generic',
+		6
+	);
+}
+
+add_action( 'admin_menu', 'bb_site_settings_admin_menu' );
+add_action( 'admin_enqueue_scripts', 'bb_site_settings_admin_scripts' );
