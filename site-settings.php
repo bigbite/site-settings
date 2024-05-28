@@ -8,7 +8,8 @@
  * Author:            Big Bite
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       site-settings
+ * Text Domain:       nss-site-settings
+ * Update URI:        false
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
