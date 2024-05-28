@@ -15,6 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+const NSS_SITE_SETTINGS = 'nss_site_settings';
+
 /**
  * Enqueue scripts for site settings.
  */
@@ -26,24 +28,24 @@ function bb_site_settings_admin_scripts() {
 
 	// Load our app.js.
 	wp_register_script(
-		'nss-site-settings',
+		NSS_SITE_SETTINGS,
 		plugins_url( 'build/index.js', __FILE__ ),
 		$dependencies,
 		$version,
 		false
 	);
 
-	wp_enqueue_script( 'nss-site-settings' );
+	wp_enqueue_script( NSS_SITE_SETTINGS );
 
 	// Load our style.css.
 	wp_register_style(
-		'nss-site-settings',
+		NSS_SITE_SETTINGS,
 		plugins_url( 'build/style-index.css', __FILE__ ),
 		[],
 		$version
 	);
 
-	wp_enqueue_style( 'nss-site-settings' );
+	wp_enqueue_style( NSS_SITE_SETTINGS );
 }
 
 /**
@@ -51,10 +53,10 @@ function bb_site_settings_admin_scripts() {
  */
 function bb_site_settings_admin_menu() {
 	add_menu_page(
-		__( 'Site Settings', 'nss-site-settings' ),
-		__( 'Site Settings', 'nss-site-settings' ),
+		__( 'Site Settings', 'nss_site_settings' ),
+		__( 'Site Settings', 'nss_site_settings' ),
 		'manage_options',
-		'nss-site-settings',
+		NSS_SITE_SETTINGS,
 		function () {
 			echo '<div id="nss-site-settings"></div>';
 		},
