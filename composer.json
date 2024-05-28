@@ -1,0 +1,10 @@
+{
+    "require-dev": {
+        "bigbite/phpcs-config": "^2.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}
