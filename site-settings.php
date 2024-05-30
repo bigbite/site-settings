@@ -67,3 +67,19 @@ function bb_site_settings_admin_menu() {
 
 add_action( 'admin_menu', 'bb_site_settings_admin_menu' );
 add_action( 'admin_enqueue_scripts', 'bb_site_settings_admin_scripts' );
+
+add_action(
+	'rest_api_init',
+	function () {
+		register_setting(
+			'nss_site_settings',
+			'nss_site_settings_values',
+			array(
+				'description'       => 'Website settings values',
+				'type'              => 'string',
+				'show_in_rest'      => true,
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
+	}
+);

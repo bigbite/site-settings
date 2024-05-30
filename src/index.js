@@ -1,5 +1,7 @@
 import domReady from "@wordpress/dom-ready";
+import NSSSiteSettings from "./NSSSiteSettings";
 import { createRoot } from "@wordpress/element";
+import { NSSSiteSettingsProvider } from "./Context";
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -9,9 +11,12 @@ import { createRoot } from "@wordpress/element";
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import "./style.scss";
-import NSSSiteSettings from "./NSSSiteSettings";
 
 domReady(() => {
 	const root = createRoot(document.getElementById("nss-site-settings"));
-	root.render(<NSSSiteSettings />);
+	root.render(
+		<NSSSiteSettingsProvider>
+			<NSSSiteSettings />
+		</NSSSiteSettingsProvider>,
+	);
 });
