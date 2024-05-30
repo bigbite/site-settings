@@ -7,6 +7,17 @@ import {
 
 const NSSSiteSettingsContext = createContext();
 
+//dummy data just to test the saveSettings function
+const dummyData = [
+	{ type: "checkbox", id: 1, props: { checked: true, label: "Test checkbox" } },
+	{
+		type: "text",
+		id: 2,
+		props: { label: "Test text field", value: "Test field" },
+	},
+	{ type: "toggle", id: 3, props: { checked: true, label: "Test toggle" } },
+];
+
 export const NSSSiteSettingsProvider = ({ children }) => {
 	const [settings, setSettings] = useState([]);
 
@@ -19,27 +30,16 @@ export const NSSSiteSettingsProvider = ({ children }) => {
 			const response = await settings.fetch();
 
 			if (response.nss_site_settings_values) {
-				setSettings(...JSON.parse(response.nss_site_settings_values));
-				console.log(JSON.parse(response.nss_site_settings_values));
+				setSettings([...JSON.parse(response.nss_site_settings_values)]);
 			}
 		};
 
 		fetchSettings();
 	}, []);
 
-	async function saveSettings(newSettings) {
-		//dummy data just to test the saveSettings function
-		const data = [
-			{
-				field: "Textfield",
-				label: "Test text control field",
-				id: 123,
-				value: "Test value",
-			},
-		];
-
+	async function saveSettings(newSettings = dummyData) {
 		const settings = new wp.api.models.Settings({
-			nss_site_settings_values: JSON.stringify(data),
+			nss_site_settings_values: JSON.stringify(newSettings),
 		});
 
 		await settings.save();

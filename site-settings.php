@@ -41,7 +41,7 @@ function bb_site_settings_admin_scripts() {
 	wp_register_style(
 		NSS_SITE_SETTINGS,
 		plugins_url( 'build/style-index.css', __FILE__ ),
-		[],
+		[ 'wp-components' ],
 		$version
 	);
 
