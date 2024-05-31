@@ -5,5 +5,20 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-#nss-site-settings {
+#bb-site-settings {
+	max-width: 600px;
+    margin: auto;
+}
+
+#bb-site-settings .bb-site-settings__setting {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1rem;
+	background-color: #f9f9f9;
+	border-bottom: 1px solid #eaeaea;
+}
+
+#bb-site-settings .bb-site-settings__setting .components-base-control {
+	margin: 0;
 }

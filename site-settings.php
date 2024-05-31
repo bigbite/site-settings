@@ -8,14 +8,14 @@
  * Author:            Big Bite
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       nss-site-settings
+ * Text Domain:       bb-site-settings
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-const NSS_SITE_SETTINGS = 'nss_site_settings';
+const BB_SITE_SETTINGS = 'bb_site_settings';
 
 /**
  * Enqueue scripts for site settings.
@@ -28,24 +28,24 @@ function bb_site_settings_admin_scripts() {
 
 	// Load our app.js.
 	wp_register_script(
-		NSS_SITE_SETTINGS,
+		BB_SITE_SETTINGS,
 		plugins_url( 'build/index.js', __FILE__ ),
 		$dependencies,
 		$version,
 		false
 	);
 
-	wp_enqueue_script( NSS_SITE_SETTINGS );
+	wp_enqueue_script( BB_SITE_SETTINGS );
 
 	// Load our style.css.
 	wp_register_style(
-		NSS_SITE_SETTINGS,
+		BB_SITE_SETTINGS,
 		plugins_url( 'build/style-index.css', __FILE__ ),
 		[ 'wp-components' ],
 		$version
 	);
 
-	wp_enqueue_style( NSS_SITE_SETTINGS );
+	wp_enqueue_style( BB_SITE_SETTINGS );
 }
 
 /**
@@ -53,12 +53,12 @@ function bb_site_settings_admin_scripts() {
  */
 function bb_site_settings_admin_menu() {
 	add_menu_page(
-		__( 'Site Settings', 'nss_site_settings' ),
-		__( 'Site Settings', 'nss_site_settings' ),
+		__( 'Site Settings', 'bb_site_settings' ),
+		__( 'Site Settings', 'bb_site_settings' ),
 		'manage_options',
-		NSS_SITE_SETTINGS,
+		BB_SITE_SETTINGS,
 		function () {
-			echo '<div id="nss-site-settings"></div>';
+			echo '<div id="bb-site-settings"></div>';
 		},
 		'dashicons-admin-generic',
 		6
@@ -72,8 +72,8 @@ add_action(
 	'rest_api_init',
 	function () {
 		register_setting(
-			'nss_site_settings',
-			'nss_site_settings_values',
+			'bb_site_settings',
+			'bb_site_settings_values',
 			array(
 				'description'       => 'Website settings values',
 				'type'              => 'string',

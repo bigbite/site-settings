@@ -1,7 +1,7 @@
 import domReady from "@wordpress/dom-ready";
-import NSSSiteSettings from "./NSSSiteSettings";
+import SiteSettings from "./SiteSettings";
 import { createRoot } from "@wordpress/element";
-import { NSSSiteSettingsProvider } from "./Context";
+import { SiteSettingsProvider } from "./Context";
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -13,10 +13,10 @@ import { NSSSiteSettingsProvider } from "./Context";
 import "./style.scss";
 
 domReady(() => {
-	const root = createRoot(document.getElementById("nss-site-settings"));
+	const root = createRoot(document.getElementById("bb-site-settings"));
 	root.render(
-		<NSSSiteSettingsProvider>
-			<NSSSiteSettings />
-		</NSSSiteSettingsProvider>,
+		<SiteSettingsProvider>
+			<SiteSettings />
+		</SiteSettingsProvider>,
 	);
 });

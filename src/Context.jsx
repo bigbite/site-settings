@@ -4,8 +4,9 @@ import {
 	useState,
 	useContext,
 } from "@wordpress/element";
+import { v4 as uuidv4 } from "uuid";
 
-const NSSSiteSettingsContext = createContext();
+const SiteSettingsContext = createContext();
 
 //dummy data just to test the saveSettings function
 const dummyData = [
@@ -18,7 +19,7 @@ const dummyData = [
 	{ type: "toggle", id: 3, props: { checked: true, label: "Test toggle" } },
 ];
 
-export const NSSSiteSettingsProvider = ({ children }) => {
+export const SiteSettingsProvider = ({ children }) => {
 	const [settings, setSettings] = useState([]);
 
 	useEffect(() => {
@@ -29,47 +30,79 @@ export const NSSSiteSettingsProvider = ({ children }) => {
 
 			const response = await settings.fetch();
 
-			if (response.nss_site_settings_values) {
-				setSettings([...JSON.parse(response.nss_site_settings_values)]);
+			if (response.bb_site_settings_values) {
+				setSettings([...JSON.parse(response.bb_site_settings_values)]);
 			}
 		};
 
 		fetchSettings();
 	}, []);
 
-	async function saveSettings(newSettings = dummyData) {
-		const settings = new wp.api.models.Settings({
-			nss_site_settings_values: JSON.stringify(newSettings),
+	async function addSetting(newSetting) {
+		newSetting.id = uuidv4();
+
+		const updatedSettings = new wp.api.models.Settings({
+			bb_site_settings_values: JSON.stringify([...settings, newSetting]),
 		});
 
-		await settings.save();
+		await updatedSettings.save();
+
+		setSettings([...settings, newSetting]);
+	}
+
+	async function updateSetting(editiedSetting) {
+		const updatedSettings = new wp.api.models.Settings({
+			bb_site_settings_values: JSON.stringify(
+				settings.map((setting) =>
+					setting.id === editiedSetting.id ? editiedSetting : setting,
+				),
+			),
+		});
+
+		await updatedSettings.save();
+
+		setSettings(
+			settings.map((setting) =>
+				setting.id === editiedSetting.id ? editiedSetting : setting,
+			),
+		);
 	}
 
 	async function deleteSetting(id) {
 		const updatedSettings = new wp.api.models.Settings({
-			nss_site_settings_values: JSON.stringify(
+			bb_site_settings_values: JSON.stringify(
 				settings.filter((setting) => setting.id !== id),
 			),
 		});
 
 		await updatedSettings.save();
+
+		setSettings(settings.filter((setting) => setting.id !== id));
 	}
 
 	async function deleteSettings() {
 		const settings = new wp.api.models.Settings({
-			nss_site_settings_values: JSON.stringify([]),
+			bb_site_settings_values: JSON.stringify([]),
 		});
 
 		await settings.save();
+
+		setSettings([]);
 	}
 
 	return (
-		<NSSSiteSettingsContext.Provider
-			value={{ settings, saveSettings, deleteSetting, deleteSettings }}
+		<SiteSettingsContext.Provider
+			value={{
+				settings,
+				addSetting,
+				deleteSetting,
+				deleteSettings,
+				updateSetting,
+			}}
 		>
 			{children}
-		</NSSSiteSettingsContext.Provider>
+		</SiteSettingsContext.Provider>
 	);
 };
 
-export const useSettings = () => useContext(NSSSiteSettingsContext);
+export const useSettings = () => useContext(SiteSettingsContext);
