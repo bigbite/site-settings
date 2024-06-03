@@ -47,7 +47,10 @@ const AddSettings = () => {
 	function handleValueChange(event) {
 		// TODO refactor this, don't like it but too tired to think of a better way atm.
 		if (setting.field === "checkbox" || setting.field === "toggle") {
-			setSetting({ ...setting, props: { ...setting.props, checked: event } });
+			setSetting({
+				...setting,
+				props: { ...setting.props, checked: event },
+			});
 		} else {
 			setSetting({ ...setting, props: { ...setting.props, value: event } });
 		}

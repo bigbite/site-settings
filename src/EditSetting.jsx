@@ -3,8 +3,8 @@ import { Button, Modal, TextControl } from "@wordpress/components";
 import supportedFields from "./supportedFields";
 import { useSettings } from "./Context";
 
-const UpdateSetting = ({ setting }) => {
-	const { updateSetting } = useSettings();
+const EditSetting = ({ setting }) => {
+	const { editSetting } = useSettings();
 	const [isOpen, setOpen] = useState(false);
 
 	const openModal = () => {
@@ -17,7 +17,7 @@ const UpdateSetting = ({ setting }) => {
 
 	async function handleSubmit(event) {
 		event.preventDefault();
-		await updateSetting(editiedSetting);
+		await editSetting(editiedSetting);
 		closeModal();
 	}
 
@@ -84,4 +84,4 @@ const UpdateSetting = ({ setting }) => {
 	);
 };
 
-export default UpdateSetting;
+export default EditSetting;

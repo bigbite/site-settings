@@ -1,33 +1,17 @@
-import {
-	useEffect,
-	createContext,
-	useState,
-	useContext,
-} from "@wordpress/element";
+import { createContext, useState, useContext } from "@wordpress/element";
 import { v4 as uuidv4 } from "uuid";
 
 const SiteSettingsContext = createContext();
 
-//dummy data just to test the saveSettings function
-const dummyData = [
-	{
-		field: "checkbox",
-		id: 1,
-		props: { checked: true, label: "Test checkbox" },
-	},
-	{
-		field: "text",
-		id: 2,
-		props: { label: "Test text field", value: "Test field" },
-	},
-	{ field: "toggle", id: 3, props: { checked: true, label: "Test toggle" } },
-];
-
 export const SiteSettingsProvider = ({ children }) => {
 	const [settings, setSettings] = useState([]);
+	const [error, setError] = useState(null);
+	const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		const fetchSettings = async () => {
+	const getSettings = async () => {
+		setLoading(true);
+
+		try {
 			await wp.api.loadPromise.done();
 
 			const settings = new wp.api.models.Settings();
@@ -37,71 +21,64 @@ export const SiteSettingsProvider = ({ children }) => {
 			if (response.bb_site_settings_values) {
 				setSettings([...JSON.parse(response.bb_site_settings_values)]);
 			}
-		};
+		} catch (err) {
+			setError(err.message);
+		} finally {
+			setLoading(false);
+		}
+	};
 
-		fetchSettings();
-	}, []);
+	const saveSettings = async (newSettings) => {
+		setLoading(true);
 
-	async function addSetting(newSetting) {
+		try {
+			const updatedSettings = new wp.api.models.Settings({
+				bb_site_settings_values: JSON.stringify(newSettings),
+			});
+
+			await updatedSettings.save();
+
+			setSettings(newSettings);
+		} catch (err) {
+			setError(err.message);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const addSetting = async (newSetting) => {
 		newSetting.id = uuidv4();
 
-		const updatedSettings = new wp.api.models.Settings({
-			bb_site_settings_values: JSON.stringify([...settings, newSetting]),
-		});
+		await saveSettings([...settings, newSetting]);
+	};
 
-		await updatedSettings.save();
-
-		setSettings([...settings, newSetting]);
-	}
-
-	async function updateSetting(editiedSetting) {
-		const updatedSettings = new wp.api.models.Settings({
-			bb_site_settings_values: JSON.stringify(
-				settings.map((setting) =>
-					setting.id === editiedSetting.id ? editiedSetting : setting,
-				),
-			),
-		});
-
-		await updatedSettings.save();
-
-		setSettings(
+	const editSetting = async (editedSetting) => {
+		await saveSettings(
 			settings.map((setting) =>
-				setting.id === editiedSetting.id ? editiedSetting : setting,
+				setting.id === editedSetting.id ? editedSetting : setting,
 			),
 		);
-	}
+	};
 
-	async function deleteSetting(id) {
-		const updatedSettings = new wp.api.models.Settings({
-			bb_site_settings_values: JSON.stringify(
-				settings.filter((setting) => setting.id !== id),
-			),
-		});
+	const deleteSetting = async (id) => {
+		await saveSettings(settings.filter((setting) => setting.id !== id));
+	};
 
-		await updatedSettings.save();
-
-		setSettings(settings.filter((setting) => setting.id !== id));
-	}
-
-	async function deleteSettings() {
-		const settings = new wp.api.models.Settings({
-			bb_site_settings_values: JSON.stringify([]),
-		});
-
-		await settings.save();
-
-		setSettings([]);
-	}
+	const deleteSettings = async () => {
+		await saveSettings([]);
+	};
 
 	return (
 		<SiteSettingsContext.Provider
 			value={{
 				settings,
+				error,
+				loading,
+				getSettings,
 				addSetting,
+				editSetting,
 				deleteSetting,
 				deleteSettings,
-				updateSetting,
 			}}
 		>
 			{children}
