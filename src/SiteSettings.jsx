@@ -1,4 +1,3 @@
-import { Button } from "@wordpress/components";
 import AddSettings from "./AddSettings";
 import Settings from "./Settings";
 import DeleteSettings from "./DeleteSettings";

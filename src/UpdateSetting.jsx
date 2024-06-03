@@ -1,6 +1,6 @@
 import { useState } from "@wordpress/element";
 import { Button, Modal, TextControl } from "@wordpress/components";
-import supportedComponents from "./supportFields";
+import supportedFields from "./supportedFields";
 import { useSettings } from "./Context";
 
 const UpdateSetting = ({ setting }) => {
@@ -30,7 +30,7 @@ const UpdateSetting = ({ setting }) => {
 
 	function handleValueChange(event) {
 		// TODO refactor this, don't like it but too tired to think of a better way atm.
-		if (setting.type === "checkbox" || setting.type === "toggle") {
+		if (setting.field === "checkbox" || setting.field === "toggle") {
 			setEditiedSetting({
 				...editiedSetting,
 				props: { ...editiedSetting.props, checked: event },
@@ -44,7 +44,8 @@ const UpdateSetting = ({ setting }) => {
 	}
 
 	const SelectComponent =
-		editiedSetting.type.length && supportedComponents[editiedSetting.type];
+		editiedSetting.field.length &&
+		supportedFields[editiedSetting.field].Component;
 
 	return (
 		<>

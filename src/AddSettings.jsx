@@ -5,7 +5,7 @@ import {
 	SelectControl,
 	TextControl,
 } from "@wordpress/components";
-import supportedComponents from "./supportFields";
+import supportedFields from "./supportedFields";
 import { useSettings } from "./Context";
 
 const AddSettings = () => {
@@ -14,13 +14,13 @@ const AddSettings = () => {
 	const [isOpen, setOpen] = useState(false);
 
 	const openModal = () => {
-		setSetting({ type: "" });
+		setSetting({ field: "" });
 		setOpen(true);
 	};
 
 	const closeModal = () => setOpen(false);
 
-	const [setting, setSetting] = useState({ type: "" });
+	const [setting, setSetting] = useState({ field: "" });
 
 	const options = [
 		{
@@ -28,8 +28,8 @@ const AddSettings = () => {
 			label: "Select an Option",
 			value: "",
 		},
-		...Object.keys(supportedComponents).map((key) => ({
-			label: key.toUpperCase(),
+		...Object.keys(supportedFields).map((key) => ({
+			label: supportedFields[key].label,
 			value: key,
 		})),
 	];
@@ -46,7 +46,7 @@ const AddSettings = () => {
 
 	function handleValueChange(event) {
 		// TODO refactor this, don't like it but too tired to think of a better way atm.
-		if (setting.type === "checkbox" || setting.type === "toggle") {
+		if (setting.field === "checkbox" || setting.field === "toggle") {
 			setSetting({ ...setting, props: { ...setting.props, checked: event } });
 		} else {
 			setSetting({ ...setting, props: { ...setting.props, value: event } });
@@ -54,7 +54,7 @@ const AddSettings = () => {
 	}
 
 	const SelectComponent =
-		setting.type.length && supportedComponents[setting.type];
+		setting.field.length && supportedFields[setting.field].Component;
 
 	return (
 		<>
@@ -68,13 +68,13 @@ const AddSettings = () => {
 							required
 							label="Select setting field"
 							options={options}
-							value={setting.type}
-							onChange={(value) => setSetting({ type: value })}
+							value={setting.field}
+							onChange={(value) => setSetting({ field: value })}
 						/>
 
 						<br />
 
-						{setting && supportedComponents[setting.type] && (
+						{setting && supportedFields[setting.field] && (
 							<>
 								<TextControl
 									label="Label for setting field"

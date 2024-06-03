@@ -10,13 +10,17 @@ const SiteSettingsContext = createContext();
 
 //dummy data just to test the saveSettings function
 const dummyData = [
-	{ type: "checkbox", id: 1, props: { checked: true, label: "Test checkbox" } },
 	{
-		type: "text",
+		field: "checkbox",
+		id: 1,
+		props: { checked: true, label: "Test checkbox" },
+	},
+	{
+		field: "text",
 		id: 2,
 		props: { label: "Test text field", value: "Test field" },
 	},
-	{ type: "toggle", id: 3, props: { checked: true, label: "Test toggle" } },
+	{ field: "toggle", id: 3, props: { checked: true, label: "Test toggle" } },
 ];
 
 export const SiteSettingsProvider = ({ children }) => {

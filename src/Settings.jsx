@@ -1,10 +1,11 @@
 import { Button } from "@wordpress/components";
-import supportedComponents from "./supportFields";
+import supportedFields from "./supportedFields";
 import UpdateSetting from "./UpdateSetting";
 import { useSettings } from "./Context";
 
 const Settings = () => {
 	const { settings, deleteSetting } = useSettings();
+	console.log(settings);
 
 	return (
 		<>
@@ -12,7 +13,7 @@ const Settings = () => {
 			{settings.length ? (
 				<ul>
 					{settings.map((setting) => {
-						const Component = supportedComponents[setting.type];
+						const Component = supportedFields[setting.field].Component;
 						const { props } = setting;
 
 						return (
