@@ -2,6 +2,7 @@ import {
 	TextControl,
 	CheckboxControl,
 	ToggleControl,
+	RadioControl,
 } from "@wordpress/components";
 
 const supportedFields = {
@@ -29,10 +30,21 @@ const supportedFields = {
 			checked: false,
 		},
 	},
+	radio: {
+		Component: RadioControl,
+		label: "Radio Field",
+		valueProp: "selected",
+		props: {
+			selected: "",
+			options: [{ label: "Placeholder option", value: "option1" }],
+		},
+	},
 };
 
 const getComponent = (field) => supportedFields[field]?.Component;
 
 const getValueProp = (field) => supportedFields[field]?.valueProp;
 
-export { getComponent, supportedFields, getValueProp };
+const getProps = (field) => supportedFields[field]?.props;
+
+export { getComponent, supportedFields, getValueProp, getProps };

@@ -1,6 +1,11 @@
 import { useState } from "@wordpress/element";
 import { SelectControl, TextControl, Button } from "@wordpress/components";
-import { getComponent, supportedFields, getValueProp } from "./supportedFields";
+import {
+	getComponent,
+	supportedFields,
+	getValueProp,
+	getProps,
+} from "./supportedFields";
 import { useSettings } from "./Context";
 import SettingModal from "./SettingModal";
 
@@ -87,20 +92,127 @@ const AddSettings = () => {
 								options={options}
 								value={setting.field}
 								onChange={(value) => {
-									const newSettings = [...settings];
-									newSettings[index] = { field: value };
-									setSettings(newSettings);
+									setSettings((prevSettings) => {
+										const newSettings = [...prevSettings];
+										newSettings[index] = {
+											field: value,
+											props: getProps(value),
+										};
+										return newSettings;
+									});
 								}}
 							/>
 						</div>
 						{setting.field.length && SelectedComponent ? (
-							<div style={{ marginTop: "30px" }}>
+							<div
+								style={{
+									marginTop: "30px",
+									// display: "flex",
+									// flexDirection: "column",
+									// alignItems: "center",
+								}}
+							>
 								<TextControl
 									label="Label for setting field"
 									onChange={(event) => handleLabelChange(index, event)}
 									value={setting.label}
 									required
 								/>
+
+								{setting.field === "radio" ? (
+									<>
+										{setting.props.options.map((option, optionsIndex) => (
+											<div
+												style={{ position: "relative", marginBottom: "30px" }}
+											>
+												<TextControl
+													label={`Option label`}
+													value={option.label}
+													onChange={(event) => {
+														setSettings((prevSettings) => {
+															const newSettings = [...prevSettings];
+
+															newSettings[index].props.options[
+																optionsIndex
+															].label = event;
+
+															return newSettings;
+														});
+													}}
+												/>
+												<TextControl
+													label={`Option value`}
+													value={option.value}
+													onChange={(event) => {
+														setSettings((prevSettings) => {
+															const newSettings = [...prevSettings];
+
+															newSettings[index].props.options[
+																optionsIndex
+															].value = event;
+
+															return newSettings;
+														});
+													}}
+												/>
+												{optionsIndex > 0 ? (
+													<Button
+														style={{
+															position: "absolute",
+															top: "-10px",
+															right: "-5px",
+														}}
+														onClick={() => {
+															setSettings((prevSettings) => {
+																const newSettings = [...prevSettings];
+
+																newSettings[index].props.options = newSettings[
+																	index
+																].props.options.filter(
+																	(option, optionIndex) =>
+																		optionIndex !== optionsIndex,
+																);
+
+																return newSettings;
+															});
+														}}
+														icon={
+															<svg
+																xmlns="http://www.w3.org/2000/svg"
+																viewBox="0 0 24 24"
+																width="36"
+																height="36"
+																aria-hidden="true"
+																focusable="false"
+															>
+																<path d="M12 13.06l3.712 3.713 1.061-1.06L13.061 12l3.712-3.712-1.06-1.06L12 10.938 8.288 7.227l-1.061 1.06L10.939 12l-3.712 3.712 1.06 1.061L12 13.061z"></path>
+															</svg>
+														}
+													/>
+												) : null}
+											</div>
+										))}
+										<Button
+											style={{ marginBottom: "30px" }}
+											onClick={() => {
+												setSettings((prevSettings) => {
+													const newSettings = [...prevSettings];
+													newSettings[index].props.options = [
+														...newSettings[index].props.options,
+														{
+															label: `New option label`,
+															value: `New Option value`,
+														},
+													];
+													return newSettings;
+												});
+											}}
+										>
+											Add option
+										</Button>
+									</>
+								) : null}
+
 								<SelectedComponent
 									{...setting.props}
 									label="Value for the setting field"

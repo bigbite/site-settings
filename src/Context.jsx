@@ -47,9 +47,14 @@ export const SiteSettingsProvider = ({ children }) => {
 	};
 
 	const addSetting = async (newSetting) => {
-		newSetting.id = uuidv4();
+		//TODO: Add validation for each newSetting
+		// newSetting[0].id = uuidv4();
+		// newSettingWithId = newSetting.map((setting) => ({...setting, id: uuidv4()}));
 
-		await saveSettings([...settings, ...newSetting]);
+		await saveSettings([
+			...settings,
+			...newSetting.map((setting) => ({ ...setting, id: uuidv4() })),
+		]);
 	};
 
 	const editSetting = async (editedSetting) => {
