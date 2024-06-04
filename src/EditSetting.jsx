@@ -1,24 +1,15 @@
 import { useState } from "@wordpress/element";
-import { Button, Modal, TextControl } from "@wordpress/components";
-import supportedFields from "./supportedFields";
+import { TextControl } from "@wordpress/components";
+import { getComponent, getValueProp } from "./supportedFields";
 import { useSettings } from "./Context";
+import SettingModal from "./SettingModal";
 
 const EditSetting = ({ setting }) => {
 	const { editSetting } = useSettings();
-	const [isOpen, setOpen] = useState(false);
-
-	const openModal = () => {
-		setOpen(true);
-	};
-
-	const closeModal = () => setOpen(false);
-
 	const [editiedSetting, setEditiedSetting] = useState(setting);
 
-	async function handleSubmit(event) {
-		event.preventDefault();
+	async function handleSubmit() {
 		await editSetting(editiedSetting);
-		closeModal();
 	}
 
 	function handleLabelChange(event) {
@@ -29,58 +20,34 @@ const EditSetting = ({ setting }) => {
 	}
 
 	function handleValueChange(event) {
-		// TODO refactor this, don't like it but too tired to think of a better way atm.
-		if (setting.field === "checkbox" || setting.field === "toggle") {
-			setEditiedSetting({
-				...editiedSetting,
-				props: { ...editiedSetting.props, checked: event },
-			});
-		} else {
-			setEditiedSetting({
-				...editiedSetting,
-				props: { ...editiedSetting.props, value: event },
-			});
-		}
+		const valueProp = getValueProp(setting.field) || "value";
+
+		setEditiedSetting({
+			...editiedSetting,
+			props: { ...editiedSetting.props, [valueProp]: event },
+		});
 	}
 
-	const SelectComponent =
-		editiedSetting.field.length &&
-		supportedFields[editiedSetting.field].Component;
+	const SelectComponent = getComponent(editiedSetting.field);
 
 	return (
-		<>
-			<Button variant="primary" onClick={openModal}>
-				Edit
-			</Button>
-			{isOpen && (
-				<Modal title="Update setting" onRequestClose={closeModal}>
-					<form onSubmit={handleSubmit}>
-						<TextControl
-							label="Label for setting field"
-							value={editiedSetting.props.label}
-							onChange={handleLabelChange}
-							required
-						/>
-						<SelectComponent
-							{...editiedSetting.props}
-							label="Value for the setting field"
-							onChange={handleValueChange}
-						/>
-
-						<br />
-
-						<div style={{ display: "flex", justifyContent: "space-between" }}>
-							<Button variant="secondary" onClick={closeModal}>
-								Cancel
-							</Button>
-							<Button type="submit" variant="primary">
-								Update
-							</Button>
-						</div>
-					</form>
-				</Modal>
-			)}
-		</>
+		<SettingModal
+			buttonText="Edit"
+			modalTitle="Edit Setting"
+			handleSubmit={handleSubmit}
+		>
+			<TextControl
+				label="Label for setting field"
+				value={editiedSetting.props.label}
+				onChange={handleLabelChange}
+				required
+			/>
+			<SelectComponent
+				{...editiedSetting.props}
+				label="Value for the setting field"
+				onChange={handleValueChange}
+			/>
+		</SettingModal>
 	);
 };
 

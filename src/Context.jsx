@@ -49,7 +49,7 @@ export const SiteSettingsProvider = ({ children }) => {
 	const addSetting = async (newSetting) => {
 		newSetting.id = uuidv4();
 
-		await saveSettings([...settings, newSetting]);
+		await saveSettings([...settings, ...newSetting]);
 	};
 
 	const editSetting = async (editedSetting) => {

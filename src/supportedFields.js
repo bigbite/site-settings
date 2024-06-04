@@ -8,27 +8,31 @@ const supportedFields = {
 	text: {
 		Component: TextControl,
 		label: "Text Field",
+		valueProp: "value",
 		props: {
-			label: "",
 			value: "",
 		},
 	},
 	toggle: {
 		Component: ToggleControl,
 		label: "Toggle Field",
+		valueProp: "checked",
 		props: {
-			label: "",
 			checked: false,
 		},
 	},
 	checkbox: {
 		Component: CheckboxControl,
 		label: "Checkbox Field",
+		valueProp: "checked",
 		props: {
-			label: "",
 			checked: false,
 		},
 	},
 };
 
-export default supportedFields;
+const getComponent = (field) => supportedFields[field]?.Component;
+
+const getValueProp = (field) => supportedFields[field]?.valueProp;
+
+export { getComponent, supportedFields, getValueProp };

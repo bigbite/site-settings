@@ -1,26 +1,13 @@
 import { useState } from "@wordpress/element";
-import {
-	Button,
-	Modal,
-	SelectControl,
-	TextControl,
-} from "@wordpress/components";
-import supportedFields from "./supportedFields";
+import { SelectControl, TextControl, Button } from "@wordpress/components";
+import { getComponent, supportedFields, getValueProp } from "./supportedFields";
 import { useSettings } from "./Context";
+import SettingModal from "./SettingModal";
 
 const AddSettings = () => {
 	const { addSetting } = useSettings();
 
-	const [isOpen, setOpen] = useState(false);
-
-	const openModal = () => {
-		setSetting({ field: "" });
-		setOpen(true);
-	};
-
-	const closeModal = () => setOpen(false);
-
-	const [setting, setSetting] = useState({ field: "" });
+	const [settings, setSettings] = useState([{ field: "" }]);
 
 	const options = [
 		{
@@ -34,79 +21,118 @@ const AddSettings = () => {
 		})),
 	];
 
-	async function handleSubmit(event) {
-		event.preventDefault();
-		await addSetting(setting);
-		closeModal();
+	async function handleSubmit() {
+		await addSetting(settings);
+
+		setSettings([{ field: "" }]);
 	}
 
-	function handleLabelChange(event) {
-		setSetting({ ...setting, props: { ...setting.props, label: event } });
+	function handleValueChange(index, event) {
+		const valueProp = getValueProp(settings[index].field) || "value";
+		const newSettings = [...settings];
+		newSettings[index] = {
+			...newSettings[index],
+			props: { ...newSettings[index].props, [valueProp]: event },
+		};
+		setSettings(newSettings);
 	}
 
-	function handleValueChange(event) {
-		// TODO refactor this, don't like it but too tired to think of a better way atm.
-		if (setting.field === "checkbox" || setting.field === "toggle") {
-			setSetting({
-				...setting,
-				props: { ...setting.props, checked: event },
-			});
-		} else {
-			setSetting({ ...setting, props: { ...setting.props, value: event } });
-		}
+	function handleLabelChange(index, event) {
+		const newSettings = [...settings];
+		newSettings[index] = {
+			...newSettings[index],
+			props: { ...newSettings[index].props, label: event },
+		};
+		setSettings(newSettings);
 	}
 
-	const SelectComponent =
-		setting.field.length && supportedFields[setting.field].Component;
+	function addNewSetting() {
+		setSettings([...settings, { field: "" }]);
+	}
+
+	function handleRemoveSetting(removeIndex) {
+		const newSettings = settings.filter(
+			(setting, index) => index !== removeIndex,
+		);
+		setSettings(newSettings);
+	}
+
+	function handleCancel() {
+		setSettings([{ field: "" }]);
+	}
 
 	return (
-		<>
-			<Button variant="primary" onClick={openModal}>
-				Add
-			</Button>
-			{isOpen && (
-				<Modal title="Add setting" onRequestClose={closeModal}>
-					<form onSubmit={handleSubmit}>
-						<SelectControl
-							required
-							label="Select setting field"
-							options={options}
-							value={setting.field}
-							onChange={(value) => setSetting({ field: value })}
-						/>
-
-						<br />
-
-						{setting && supportedFields[setting.field] && (
-							<>
+		<SettingModal
+			buttonText="Add"
+			modalTitle="Add new settings"
+			handleSubmit={handleSubmit}
+			handleCancel={handleCancel}
+		>
+			{settings.map((setting, index) => {
+				const SelectedComponent = getComponent(setting.field);
+				return (
+					<div
+						style={{
+							marginBottom: "30px",
+							backgroundColor: "antiquewhite",
+							padding: "10px",
+							position: "relative",
+						}}
+						key={index}
+					>
+						<div>
+							<SelectControl
+								required
+								label="Select setting field"
+								options={options}
+								value={setting.field}
+								onChange={(value) => {
+									const newSettings = [...settings];
+									newSettings[index] = { field: value };
+									setSettings(newSettings);
+								}}
+							/>
+						</div>
+						{setting.field.length && SelectedComponent ? (
+							<div style={{ marginTop: "30px" }}>
 								<TextControl
 									label="Label for setting field"
-									onChange={handleLabelChange}
+									onChange={(event) => handleLabelChange(index, event)}
 									value={setting.label}
 									required
 								/>
-								<SelectComponent
+								<SelectedComponent
 									{...setting.props}
 									label="Value for the setting field"
-									onChange={handleValueChange}
+									onChange={(event) => handleValueChange(index, event)}
 								/>
-							</>
-						)}
-
-						<br />
-
-						<div style={{ display: "flex", justifyContent: "space-between" }}>
-							<Button variant="secondary" onClick={closeModal}>
-								Cancel
-							</Button>
-							<Button type="submit" variant="primary">
-								Add
-							</Button>
-						</div>
-					</form>
-				</Modal>
-			)}
-		</>
+							</div>
+						) : null}
+						{index > 0 ? (
+							<Button
+								style={{ position: "absolute", top: "0", right: "0" }}
+								onClick={() => handleRemoveSetting(index)}
+								icon={
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 24 24"
+										width="36"
+										height="36"
+										aria-hidden="true"
+										focusable="false"
+									>
+										<path d="M12 13.06l3.712 3.713 1.061-1.06L13.061 12l3.712-3.712-1.06-1.06L12 10.938 8.288 7.227l-1.061 1.06L10.939 12l-3.712 3.712 1.06 1.061L12 13.061z"></path>
+									</svg>
+								}
+							/>
+						) : null}
+					</div>
+				);
+			})}
+			<div style={{ display: "flex", justifyContent: "center" }}>
+				<Button onClick={addNewSetting}>Add another setting</Button>
+			</div>
+		</SettingModal>
 	);
 };
 
