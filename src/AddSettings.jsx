@@ -2,9 +2,9 @@ import { useState } from "@wordpress/element";
 import { SelectControl, TextControl, Button } from "@wordpress/components";
 import {
 	getComponent,
-	supportedFields,
 	getValueProp,
 	getProps,
+	getSelectSupportedOptions,
 } from "./supportedFields";
 import { useSettings } from "./Context";
 import SettingModal from "./SettingModal";
@@ -13,18 +13,6 @@ const AddSettings = () => {
 	const { addSetting } = useSettings();
 
 	const [settings, setSettings] = useState([{ field: "" }]);
-
-	const options = [
-		{
-			disabled: true,
-			label: "Select an Option",
-			value: "",
-		},
-		...Object.keys(supportedFields).map((key) => ({
-			label: supportedFields[key].label,
-			value: key,
-		})),
-	];
 
 	async function handleSubmit() {
 		await addSetting(settings);
@@ -89,7 +77,7 @@ const AddSettings = () => {
 							<SelectControl
 								required
 								label="Select setting field"
-								options={options}
+								options={getSelectSupportedOptions()}
 								value={setting.field}
 								onChange={(value) => {
 									setSettings((prevSettings) => {
@@ -107,9 +95,6 @@ const AddSettings = () => {
 							<div
 								style={{
 									marginTop: "30px",
-									// display: "flex",
-									// flexDirection: "column",
-									// alignItems: "center",
 								}}
 							>
 								<TextControl
@@ -118,6 +103,14 @@ const AddSettings = () => {
 									value={setting.label}
 									required
 								/>
+
+								{setting.field === "text" || setting.field === "toggle" ? (
+									<SelectedComponent
+										{...setting.props}
+										label="Value for the setting field"
+										onChange={(event) => handleValueChange(index, event)}
+									/>
+								) : null}
 
 								{setting.field === "radio" ? (
 									<>
@@ -210,14 +203,38 @@ const AddSettings = () => {
 										>
 											Add option
 										</Button>
+
+										<SelectedComponent
+											{...setting.props}
+											label="Value for the setting field"
+											onChange={(event) => handleValueChange(index, event)}
+										/>
 									</>
 								) : null}
 
-								<SelectedComponent
-									{...setting.props}
-									label="Value for the setting field"
-									onChange={(event) => handleValueChange(index, event)}
-								/>
+								{setting.field === "checkbox" ? (
+									<>
+										<TextControl
+											label={`Checkbox label`}
+											value={setting.props.label}
+											onChange={(event) => {
+												setSettings((prevSettings) => {
+													const newSettings = [...prevSettings];
+
+													newSettings[index].props.label = event;
+
+													return newSettings;
+												});
+											}}
+										/>
+
+										<SelectedComponent
+											{...setting.props}
+											label="Value for the setting field"
+											onChange={(event) => handleValueChange(index, event)}
+										/>
+									</>
+								) : null}
 							</div>
 						) : null}
 						{index > 0 ? (

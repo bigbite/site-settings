@@ -9,6 +9,7 @@ const supportedFields = {
 	text: {
 		Component: TextControl,
 		label: "Text Field",
+		disabled: false,
 		valueProp: "value",
 		props: {
 			value: "",
@@ -16,6 +17,7 @@ const supportedFields = {
 	},
 	toggle: {
 		Component: ToggleControl,
+		disabled: false,
 		label: "Toggle Field",
 		valueProp: "checked",
 		props: {
@@ -24,6 +26,7 @@ const supportedFields = {
 	},
 	checkbox: {
 		Component: CheckboxControl,
+		disabled: true,
 		label: "Checkbox Field",
 		valueProp: "checked",
 		props: {
@@ -33,10 +36,11 @@ const supportedFields = {
 	radio: {
 		Component: RadioControl,
 		label: "Radio Field",
+		disabled: false,
 		valueProp: "selected",
 		props: {
 			selected: "",
-			options: [{ label: "Placeholder option", value: "option1" }],
+			options: [{ label: "placeholder label", value: "placeholder" }],
 		},
 	},
 };
@@ -47,4 +51,23 @@ const getValueProp = (field) => supportedFields[field]?.valueProp;
 
 const getProps = (field) => supportedFields[field]?.props;
 
-export { getComponent, supportedFields, getValueProp, getProps };
+const getSelectSupportedOptions = () => [
+	{
+		disabled: true,
+		label: "Select an field",
+		value: "",
+	},
+	...Object.keys(supportedFields).map((key) => ({
+		label: supportedFields[key].label,
+		disabled: supportedFields[key].disabled,
+		value: key,
+	})),
+];
+
+export {
+	getComponent,
+	supportedFields,
+	getValueProp,
+	getProps,
+	getSelectSupportedOptions,
+};
