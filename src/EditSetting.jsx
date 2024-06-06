@@ -1,5 +1,5 @@
 import { useState } from "@wordpress/element";
-import { TextControl } from "@wordpress/components";
+import { CheckboxControl, TextControl } from "@wordpress/components";
 import { getComponent, getValueProp } from "./supportedFields";
 import { useSettings } from "./Context";
 import SettingModal from "./SettingModal";
@@ -42,11 +42,48 @@ const EditSetting = ({ setting }) => {
 				onChange={handleLabelChange}
 				required
 			/>
-			<SelectComponent
-				{...editiedSetting.props}
-				label="Value for the setting field"
-				onChange={handleValueChange}
-			/>
+
+			<br />
+
+			{editiedSetting.field === "checkbox" ? (
+				<>
+					{editiedSetting.checkboxes.map((checkbox, index) => (
+						<TextControl
+							key={index}
+							label="Checkbox label"
+							value={checkbox.label}
+							onChange={(event) => {
+								setEditiedSetting((prev) => {
+									const updatedSettings = { ...prev };
+									updatedSettings.checkboxes[index].label = event;
+
+									return updatedSettings;
+								});
+							}}
+						/>
+					))}
+					{editiedSetting.checkboxes.map((checkbox, index) => (
+						<CheckboxControl
+							key={index}
+							label={checkbox.label}
+							checked={checkbox.checked}
+							onChange={(event) => {
+								setEditiedSetting((prev) => {
+									const updatedSettings = { ...prev };
+									updatedSettings.checkboxes[index].checked = event;
+									return updatedSettings;
+								});
+							}}
+						/>
+					))}
+				</>
+			) : (
+				<SelectComponent
+					{...editiedSetting.props}
+					label="Value for the setting field"
+					onChange={handleValueChange}
+				/>
+			)}
 		</SettingModal>
 	);
 };

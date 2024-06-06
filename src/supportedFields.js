@@ -26,7 +26,7 @@ const supportedFields = {
 	},
 	checkbox: {
 		Component: CheckboxControl,
-		disabled: true,
+		disabled: false,
 		label: "Checkbox Field",
 		valueProp: "checked",
 		props: {

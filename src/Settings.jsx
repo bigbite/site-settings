@@ -1,5 +1,5 @@
 import { useEffect } from "@wordpress/element";
-import { Button } from "@wordpress/components";
+import { Button, CheckboxControl } from "@wordpress/components";
 import EditSetting from "./EditSetting";
 import { useSettings } from "./Context";
 import { getComponent } from "./supportedFields";
@@ -33,7 +33,14 @@ const Settings = () => {
 					return (
 						<div key={setting.id}>
 							<li className="bb-site-settings__setting">
-								<Component disabled {...props} />
+								{setting.field === "checkbox" ? (
+									setting.checkboxes.map((checkbox, index) => (
+										<CheckboxControl disabled key={index} {...checkbox} />
+									))
+								) : (
+									<Component disabled {...props} />
+								)}
+
 								<div>
 									<Button
 										onClick={() => deleteSetting(setting.id)}
