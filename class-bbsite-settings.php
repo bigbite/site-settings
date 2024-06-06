@@ -102,10 +102,23 @@ class BBSiteSettings {
 	 *
 	 * @return mixed
 	 */
-	public function get_value( $option_name, $key_name ) {
-		$option = get_option( $option_name );
-		return $option[ $key_name ] ?? null;
+	public static function get_value( $option_name, $key_name ) {
+		$option = json_decode( get_option( $option_name ), true );
+
+		if ( ! $option ) {
+			return null;
+		}
+
+		foreach ( $option as $item ) {
+			if ( $item['id'] === $key_name ) {
+				return $item;
+			}
+		}
 	}
 }
 
 new BBSiteSettings();
+
+// echo '<pre>';
+// var_dump( BBSiteSettings::get_value( 'bb_site_settings_values', '2b75883d-30af-490e-a369-c97e936b4265' ) );
+// echo '</pre>';
