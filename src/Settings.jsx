@@ -3,6 +3,7 @@ import { Button, CheckboxControl } from "@wordpress/components";
 import EditSetting from "./EditSetting";
 import { useSettings } from "./Context";
 import { getComponent } from "./supportedFields";
+import ImportSettings from "./ImportSettings";
 
 const Info = ({ children }) => (
 	<h2 style={{ marginBottom: "30px" }}>{children}</h2>
@@ -62,7 +63,16 @@ const Settings = () => {
 
 	return (
 		<>
-			<h1 style={{ marginBottom: "30px" }}>Site Settings</h1>
+			<div
+				style={{
+					display: "flex",
+					justifyContent: "space-between",
+					alignItems: "center",
+				}}
+			>
+				<h1 style={{ marginBottom: "30px" }}>Site Settings</h1>
+				<ImportSettings />
+			</div>
 			{renderContent()}
 		</>
 	);
