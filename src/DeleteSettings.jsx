@@ -12,9 +12,13 @@ const DeleteSettings = () => {
 
 	return settings.length ? (
 		<>
-			<Button variant="secondary" isDestructive onClick={openModal}>
-				Delete all
-			</Button>
+			<Button
+				icon="trash"
+				variant="secondary"
+				isDestructive
+				onClick={openModal}
+				style={{ marginRight: "10px" }}
+			/>
 			{isOpen && (
 				<Modal title="Are you sure?" onRequestClose={closeModal}>
 					<Button variant="primary" isDestructive onClick={deleteSettings}>

@@ -1,7 +1,9 @@
+import { Button } from "@wordpress/components";
 import { useSettings } from "./Context";
 
 const ImportSettings = () => {
 	const { addSetting } = useSettings();
+	let fileInput = React.createRef();
 
 	const handleImport = (e) => {
 		const file = e.target.files[0];
@@ -20,7 +22,23 @@ const ImportSettings = () => {
 		reader.readAsText(file);
 	};
 
-	return <input type="file" accept=".json" onChange={handleImport} />;
+	return (
+		<>
+			<input
+				type="file"
+				accept=".json"
+				onChange={handleImport}
+				style={{ display: "none" }}
+				ref={fileInput}
+			/>
+			<Button
+				icon="database-import"
+				variant="secondary"
+				style={{ marginRight: "10px" }}
+				onClick={() => fileInput.current.click()}
+			/>
+		</>
+	);
 };
 
 export default ImportSettings;

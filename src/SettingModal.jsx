@@ -16,9 +16,8 @@ const SettingModal = ({
 
 	return (
 		<>
-			<Button variant="primary" onClick={openModal}>
-				{buttonText}
-			</Button>
+			<Button icon={buttonText} variant="primary" onClick={openModal} />
+
 			{isOpen && (
 				<Modal title={modalTitle} onRequestClose={closeModal}>
 					<form

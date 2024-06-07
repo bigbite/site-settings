@@ -1,5 +1,5 @@
 import domReady from "@wordpress/dom-ready";
-import SiteSettings from "./SiteSettings";
+import Settings from "./Settings";
 import { createRoot } from "@wordpress/element";
 import { SiteSettingsProvider } from "./Context";
 
@@ -16,7 +16,7 @@ domReady(() => {
 	const root = createRoot(document.getElementById("bb-site-settings"));
 	root.render(
 		<SiteSettingsProvider>
-			<SiteSettings />
+			<Settings />
 		</SiteSettingsProvider>,
 	);
 });

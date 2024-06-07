@@ -12,6 +12,7 @@ const supportedFields = {
 		disabled: false,
 		valueProp: "value",
 		props: {
+			label: "",
 			value: "",
 		},
 	},
@@ -21,6 +22,7 @@ const supportedFields = {
 		label: "Toggle Field",
 		valueProp: "checked",
 		props: {
+			label: "",
 			checked: false,
 		},
 	},
@@ -30,6 +32,7 @@ const supportedFields = {
 		label: "Checkbox Field",
 		valueProp: "checked",
 		props: {
+			label: "",
 			checked: false,
 		},
 	},

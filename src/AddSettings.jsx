@@ -14,38 +14,54 @@ import {
 import { useSettings } from "./Context";
 import SettingModal from "./SettingModal";
 
+function getEmptySetting() {
+	return {
+		title: "",
+		value: null,
+		fields: [{ type: "", props: {} }],
+	};
+}
+
 const AddSettings = () => {
 	const { addSetting } = useSettings();
 
-	const [settings, setSettings] = useState([{ field: "" }]);
+	const [settings, setSettings] = useState([getEmptySetting()]);
 
 	async function handleSubmit() {
 		await addSetting(settings);
 
-		setSettings([{ field: "" }]);
+		setSettings([getEmptySetting()]);
 	}
 
 	function handleValueChange(index, event) {
-		const valueProp = getValueProp(settings[index].field) || "value";
-		const newSettings = [...settings];
-		newSettings[index] = {
-			...newSettings[index],
-			props: { ...newSettings[index].props, [valueProp]: event },
-		};
-		setSettings(newSettings);
+		setSettings((prevSettings) => {
+			const valueProp =
+				getValueProp(prevSettings[index].fields[0].type) || "value";
+			const newSettings = [...prevSettings];
+			newSettings[index].value = event;
+			newSettings[index].fields[0].props[valueProp] = event;
+			return newSettings;
+		});
 	}
 
 	function handleLabelChange(index, event) {
-		const newSettings = [...settings];
-		newSettings[index] = {
-			...newSettings[index],
-			props: { ...newSettings[index].props, label: event },
-		};
-		setSettings(newSettings);
+		setSettings((prevSettings) => {
+			const newSettings = [...prevSettings];
+			newSettings[index].fields[0].props.label = event;
+			return newSettings;
+		});
+	}
+
+	function handleSettingTitleChange(index, event) {
+		setSettings((prevSettings) => {
+			const newSettings = [...prevSettings];
+			newSettings[index] = { ...newSettings[index], title: event };
+			return newSettings;
+		});
 	}
 
 	function addNewSetting() {
-		setSettings([...settings, { field: "" }]);
+		setSettings([...settings, getEmptySetting()]);
 	}
 
 	function handleRemoveSetting(removeIndex) {
@@ -56,18 +72,18 @@ const AddSettings = () => {
 	}
 
 	function handleCancel() {
-		setSettings([{ field: "" }]);
+		setSettings([getComponent()]);
 	}
 
 	return (
 		<SettingModal
-			buttonText="Add"
+			buttonText="plus"
 			modalTitle="Add new settings"
 			handleSubmit={handleSubmit}
 			handleCancel={handleCancel}
 		>
-			{settings.map((setting, index) => {
-				const SelectedComponent = getComponent(setting.field);
+			{settings?.map((setting, index) => {
+				const SelectedComponent = getComponent(settings[index].fields[0].type);
 				return (
 					<div
 						style={{
@@ -83,136 +99,127 @@ const AddSettings = () => {
 								required
 								label="Select setting field"
 								options={getSelectSupportedOptions()}
-								value={setting.field}
+								value={setting.fields[0].type}
 								onChange={(value) => {
-									if (value === "checkbox") {
-										setSettings((prevSettings) => {
-											const newSettings = [...prevSettings];
-											newSettings[index] = {
-												field: value,
-												checkboxes: [
-													{
-														label: `Checkbox label`,
-														checked: false,
-													},
-												],
-											};
-											return newSettings;
-										});
-									} else {
-										setSettings((prevSettings) => {
-											const newSettings = [...prevSettings];
-											newSettings[index] = {
-												field: value,
-												props: getProps(value),
-											};
-											return newSettings;
-										});
-									}
+									setSettings((prevSettings) => {
+										const newSettings = [...prevSettings];
+										newSettings[index] = {
+											title: "",
+											value: null,
+											fields: [
+												{
+													type: value,
+													props: getProps(value),
+												},
+											],
+										};
+										return newSettings;
+									});
 								}}
 							/>
 						</div>
-						{setting.field.length && SelectedComponent ? (
+						{setting.fields.length && SelectedComponent ? (
 							<div
 								style={{
 									marginTop: "30px",
 								}}
 							>
 								<TextControl
-									label="Label for setting field"
-									onChange={(event) => handleLabelChange(index, event)}
-									value={setting.label}
+									label="Setting title"
+									onChange={(event) => handleSettingTitleChange(index, event)}
+									value={setting.title}
 									required
 								/>
 
-								{setting.field === "text" || setting.field === "toggle" ? (
-									<SelectedComponent
-										{...setting.props}
-										label="Value for the setting field"
-										onChange={(event) => handleValueChange(index, event)}
-									/>
+								{setting.fields[0].type === "text" ||
+								setting.fields[0].type === "toggle" ? (
+									<>
+										<TextControl
+											label="Label for the setting field"
+											onChange={(event) => handleLabelChange(index, event)}
+											value={settings[index].fields[0].props.label}
+											required
+										/>
+										<SelectedComponent
+											{...setting.fields[0].props}
+											onChange={(event) => handleValueChange(index, event)}
+										/>
+									</>
 								) : null}
 
-								{setting.field === "radio" ? (
+								{setting.fields[0].type === "radio" ? (
 									<>
-										{setting.props.options.map((option, optionsIndex) => (
-											<div
-												style={{ position: "relative", marginBottom: "30px" }}
-											>
-												<TextControl
-													label={`Option label`}
-													value={option.label}
-													onChange={(event) => {
-														setSettings((prevSettings) => {
-															const newSettings = [...prevSettings];
-
-															newSettings[index].props.options[
-																optionsIndex
-															].label = event;
-
-															return newSettings;
-														});
-													}}
-												/>
-												<TextControl
-													label={`Option value`}
-													value={option.value}
-													onChange={(event) => {
-														setSettings((prevSettings) => {
-															const newSettings = [...prevSettings];
-
-															newSettings[index].props.options[
-																optionsIndex
-															].value = event;
-
-															return newSettings;
-														});
-													}}
-												/>
-												{optionsIndex > 0 ? (
-													<Button
-														style={{
-															position: "absolute",
-															top: "-10px",
-															right: "-5px",
-														}}
-														onClick={() => {
+										{setting.fields[0].props.options.map(
+											(option, optionsIndex) => (
+												<div
+													key={optionsIndex}
+													style={{ position: "relative", marginBottom: "30px" }}
+												>
+													<TextControl
+														label="Option label"
+														value={option.label}
+														onChange={(event) => {
 															setSettings((prevSettings) => {
 																const newSettings = [...prevSettings];
 
-																newSettings[index].props.options = newSettings[
-																	index
-																].props.options.filter(
-																	(option, optionIndex) =>
-																		optionIndex !== optionsIndex,
-																);
+																newSettings[index].fields[0].props.options[
+																	optionsIndex
+																].label = event;
 
 																return newSettings;
 															});
 														}}
-														icon={
-															<svg
-																xmlns="http://www.w3.org/2000/svg"
-																viewBox="0 0 24 24"
-																width="36"
-																height="36"
-																aria-hidden="true"
-																focusable="false"
-															>
-																<path d="M12 13.06l3.712 3.713 1.061-1.06L13.061 12l3.712-3.712-1.06-1.06L12 10.938 8.288 7.227l-1.061 1.06L10.939 12l-3.712 3.712 1.06 1.061L12 13.061z"></path>
-															</svg>
-														}
 													/>
-												) : null}
-											</div>
-										))}
+													<TextControl
+														label="Option value"
+														value={option.value}
+														onChange={(event) => {
+															setSettings((prevSettings) => {
+																const newSettings = [...prevSettings];
+
+																newSettings[index].fields[0].props.options[
+																	optionsIndex
+																].value = event;
+
+																return newSettings;
+															});
+														}}
+													/>
+													{optionsIndex > 0 ? (
+														<Button
+															style={{
+																position: "absolute",
+																top: "-10px",
+																right: "-5px",
+															}}
+															onClick={() => {
+																setSettings((prevSettings) => {
+																	const newSettings = [...prevSettings];
+
+																	newSettings[index].fields[0].props.options =
+																		newSettings[
+																			index
+																		].fields[0].props.options.filter(
+																			(option, optionIndex) =>
+																				optionIndex !== optionsIndex,
+																		);
+
+																	return newSettings;
+																});
+															}}
+															icon="no-alt"
+														/>
+													) : null}
+												</div>
+											),
+										)}
 										<Button
 											style={{ marginBottom: "30px" }}
 											onClick={() => {
 												setSettings((prevSettings) => {
 													const newSettings = [...prevSettings];
-													newSettings[index].props.options = [
-														...newSettings[index].props.options,
+													newSettings[index].fields[0].props.options = [
+														...newSettings[index].fields[0].props.options,
 														{
 															label: `New option label`,
 															value: `New Option value`,
@@ -226,82 +233,86 @@ const AddSettings = () => {
 										</Button>
 
 										<SelectedComponent
-											{...setting.props}
-											label="Value for the setting field"
-											onChange={(event) => handleValueChange(index, event)}
+											{...setting.fields[0].props}
+											onChange={(event) => {
+												setSettings((prevSettings) => {
+													const newSettings = [...prevSettings];
+
+													newSettings[index].value = event;
+													newSettings[index].fields[0].props.selected = event;
+													return newSettings;
+												});
+											}}
 										/>
 									</>
 								) : null}
 
-								{setting.field === "checkbox" ? (
+								{setting.fields[0].type === "checkbox" ? (
 									<>
-										{settings[index].checkboxes.map(
-											(checkbox, checkboxesIndex) => (
-												<div
-													style={{ position: "relative", marginBottom: "30px" }}
-												>
-													<TextControl
-														label={`Checkbox label`}
-														value={checkbox.label}
-														onChange={(event) => {
+										{setting.fields.map((checkbox, checkboxesIndex) => (
+											<div
+												key={checkboxesIndex}
+												style={{ position: "relative", marginBottom: "30px" }}
+											>
+												<TextControl
+													label="Checkbox label"
+													value={checkbox.propslabel}
+													onChange={(event) => {
+														setSettings((prevSettings) => {
+															const newSettings = [...prevSettings];
+
+															newSettings[index].fields[
+																checkboxesIndex
+															].props.label = event;
+
+															return newSettings;
+														});
+													}}
+												/>
+												{checkboxesIndex > 0 ? (
+													<Button
+														style={{
+															position: "absolute",
+															top: "-10px",
+															right: "-5px",
+														}}
+														onClick={() => {
 															setSettings((prevSettings) => {
 																const newSettings = [...prevSettings];
-																newSettings[index].checkboxes[
-																	checkboxesIndex
-																].label = event;
+
+																newSettings[index].fields = newSettings[
+																	index
+																].fields.filter(
+																	(_, checkboxIndex) =>
+																		checkboxIndex !== checkboxesIndex,
+																);
+
 																return newSettings;
 															});
 														}}
+														icon="no-alt"
 													/>
-													{checkboxesIndex > 0 ? (
-														<Button
-															style={{
-																position: "absolute",
-																top: "-10px",
-																right: "-5px",
-															}}
-															onClick={() => {
-																setSettings((prevSettings) => {
-																	const newSettings = [...prevSettings];
-																	newSettings[index].checkboxes = newSettings[
-																		index
-																	].checkboxes.filter(
-																		(_, checkboxIndex) =>
-																			checkboxIndex !== checkboxesIndex,
-																	);
-																	return newSettings;
-																});
-															}}
-															icon={
-																<svg
-																	xmlns="http://www.w3.org/2000/svg"
-																	viewBox="0 0 24 24"
-																	width="36"
-																	height="36"
-																	aria-hidden="true"
-																	focusable="false"
-																>
-																	<path d="M12 13.06l3.712 3.713 1.061-1.06L13.061 12l3.712-3.712-1.06-1.06L12 10.938 8.288 7.227l-1.061 1.06L10.939 12l-3.712 3.712 1.06 1.061L12 13.061z"></path>
-																</svg>
-															}
-														/>
-													) : null}
-												</div>
-											),
-										)}
-										{settings[index].checkboxes.length > 0 ? (
+												) : null}
+											</div>
+										))}
+										{setting.fields.length > 0 ? (
 											<Button
 												style={{ marginBottom: "30px" }}
 												onClick={() => {
 													setSettings((prevSettings) => {
 														const newSettings = [...prevSettings];
-														newSettings[index].checkboxes = [
-															...newSettings[index].checkboxes,
+
+														newSettings[index].fields = [
+															...newSettings[index].fields,
 															{
-																label: `New checkbox label`,
-																checked: false,
+																type: "checkbox",
+																props: {
+																	label: `New checkbox label`,
+																	checked: false,
+																},
 															},
 														];
+
 														return newSettings;
 													});
 												}}
@@ -309,23 +320,41 @@ const AddSettings = () => {
 												Add checkbox
 											</Button>
 										) : null}
-										{settings[index].checkboxes.map(
-											(checkbox, checkboxIndex) => (
-												<CheckboxControl
-													label={checkbox.label}
-													checked={checkbox.checked}
-													onChange={(checked) => {
-														setSettings((prevSettings) => {
-															const newSettings = [...prevSettings];
-															newSettings[index].checkboxes[
-																checkboxIndex
-															].checked = checked;
-															return newSettings;
-														});
-													}}
-												/>
-											),
-										)}
+										{setting.fields.map((checkbox, checkboxIndex) => (
+											<SelectedComponent
+												key={checkboxIndex}
+												{...checkbox.props}
+												onChange={(checked) => {
+													setSettings((prevSettings) => {
+														const newSettings = [...prevSettings];
+
+														newSettings[index].fields[
+															checkboxIndex
+														].props.checked = checked;
+
+														// Update the value array
+														if (checked) {
+															// Checkbox is checked, add the label to the value array
+															if (!newSettings[index].value) {
+																newSettings[index].value = [];
+															}
+															newSettings[index].value.push(
+																checkbox.props.label,
+															);
+														} else {
+															// Checkbox is unchecked, remove the label from the value array
+															newSettings[index].value = newSettings[
+																index
+															].value.filter(
+																(value) => value !== checkbox.props.label,
+															);
+														}
+
+														return newSettings;
+													});
+												}}
+											/>
+										))}
 									</>
 								) : null}
 							</div>
@@ -334,18 +363,7 @@ const AddSettings = () => {
 							<Button
 								style={{ position: "absolute", top: "0", right: "0" }}
 								onClick={() => handleRemoveSetting(index)}
-								icon={
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										viewBox="0 0 24 24"
-										width="36"
-										height="36"
-										aria-hidden="true"
-										focusable="false"
-									>
-										<path d="M12 13.06l3.712 3.713 1.061-1.06L13.061 12l3.712-3.712-1.06-1.06L12 10.938 8.288 7.227l-1.061 1.06L10.939 12l-3.712 3.712 1.06 1.061L12 13.061z"></path>
-									</svg>
-								}
+								icon="no-alt"
 							/>
 						) : null}
 					</div>

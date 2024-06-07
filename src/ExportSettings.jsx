@@ -20,9 +20,8 @@ const ExportSettings = () => {
 			variant="secondary"
 			onClick={handleExport}
 			style={{ marginRight: "10px" }}
-		>
-			Export settings
-		</Button>
+			icon="database-export"
+		/>
 	) : null;
 };
 

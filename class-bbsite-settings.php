@@ -98,11 +98,11 @@ class BBSiteSettings {
 	 * Get value from the options table
 	 *
 	 * @param string $option_name The name of the option table.
-	 * @param string $key_name The name of the key.
+	 * @param string $id The id of the of the setting.
 	 *
 	 * @return mixed
 	 */
-	public static function get_value( $option_name, $key_name ) {
+	public static function get_value( $option_name, $id ) {
 		$option = json_decode( get_option( $option_name ), true );
 
 		if ( ! $option ) {
@@ -110,8 +110,8 @@ class BBSiteSettings {
 		}
 
 		foreach ( $option as $item ) {
-			if ( $item['id'] === $key_name ) {
-				return $item;
+			if ( $item['id'] === $id ) {
+				return $item['value'];
 			}
 		}
 	}
@@ -120,5 +120,5 @@ class BBSiteSettings {
 new BBSiteSettings();
 
 // echo '<pre>';
-// var_dump( BBSiteSettings::get_value( 'bb_site_settings_values', '2b75883d-30af-490e-a369-c97e936b4265' ) );
+// var_dump( BBSiteSettings::get_value( 'bb_site_settings_values', '5cd4ca83-2802-4297-abc2-3a690b4a584e' ) );
 // echo '</pre>';

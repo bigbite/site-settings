@@ -1,5 +1,5 @@
 import { useState } from "@wordpress/element";
-import { CheckboxControl, TextControl } from "@wordpress/components";
+import { TextControl } from "@wordpress/components";
 import { getComponent, getValueProp } from "./supportedFields";
 import { useSettings } from "./Context";
 import SettingModal from "./SettingModal";
@@ -7,6 +7,7 @@ import SettingModal from "./SettingModal";
 const EditSetting = ({ setting }) => {
 	const { editSetting } = useSettings();
 	const [editiedSetting, setEditiedSetting] = useState(setting);
+	const field = editiedSetting.fields[0].type;
 
 	async function handleSubmit() {
 		await editSetting(editiedSetting);
@@ -15,72 +16,75 @@ const EditSetting = ({ setting }) => {
 	function handleLabelChange(event) {
 		setEditiedSetting({
 			...editiedSetting,
-			props: { ...editiedSetting.props, label: event },
+			title: event,
 		});
 	}
 
 	function handleValueChange(event) {
-		const valueProp = getValueProp(setting.field) || "value";
+		const valueProp = getValueProp(field) || "value";
 
 		setEditiedSetting({
 			...editiedSetting,
-			props: { ...editiedSetting.props, [valueProp]: event },
+			value: event,
+			fields: [
+				{
+					...editiedSetting.fields[0],
+					props: {
+						...editiedSetting.fields[0].props,
+						[valueProp]: event,
+					},
+				},
+			],
 		});
 	}
 
-	const SelectComponent = getComponent(editiedSetting.field);
+	const Component = getComponent(field);
 
 	return (
 		<SettingModal
-			buttonText="Edit"
+			buttonText="edit"
 			modalTitle="Edit Setting"
 			handleSubmit={handleSubmit}
 		>
 			<TextControl
-				label="Label for setting field"
-				value={editiedSetting.props.label}
+				label="Title of the setting field"
+				value={editiedSetting.title}
 				onChange={handleLabelChange}
 				required
 			/>
 
 			<br />
 
-			{editiedSetting.field === "checkbox" ? (
-				<>
-					{editiedSetting.checkboxes.map((checkbox, index) => (
-						<TextControl
-							key={index}
-							label="Checkbox label"
-							value={checkbox.label}
-							onChange={(event) => {
-								setEditiedSetting((prev) => {
-									const updatedSettings = { ...prev };
-									updatedSettings.checkboxes[index].label = event;
+			{field === "checkbox" ? (
+				editiedSetting.fields.map((checkbox, index) => (
+					<Component
+						key={index}
+						{...checkbox.props}
+						onChange={(event) => {
+							setEditiedSetting((prev) => {
+								const updatedSettings = { ...prev };
+								updatedSettings.fields[index].props.checked = event;
 
-									return updatedSettings;
-								});
-							}}
-						/>
-					))}
-					{editiedSetting.checkboxes.map((checkbox, index) => (
-						<CheckboxControl
-							key={index}
-							label={checkbox.label}
-							checked={checkbox.checked}
-							onChange={(event) => {
-								setEditiedSetting((prev) => {
-									const updatedSettings = { ...prev };
-									updatedSettings.checkboxes[index].checked = event;
-									return updatedSettings;
-								});
-							}}
-						/>
-					))}
-				</>
+								// Update the value array
+								if (event) {
+									// Checkbox is checked, add the label to the value array
+									updatedSettings.value.push(checkbox.props.label);
+								} else {
+									// Checkbox is unchecked, remove the label from the value array
+									updatedSettings.value = updatedSettings.value.filter(
+										(value) => value !== checkbox.props.label,
+									);
+								}
+
+								return updatedSettings;
+							});
+						}}
+					/>
+				))
 			) : (
-				<SelectComponent
-					{...editiedSetting.props}
-					label="Value for the setting field"
+				<Component
+					required
+					{...editiedSetting.fields[0].props}
 					onChange={handleValueChange}
 				/>
 			)}
