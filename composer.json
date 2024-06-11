@@ -6,5 +6,8 @@
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
-    }
+    },
+	"scripts": {
+		"phpcs": "./vendor/bin/phpcs --ignore=build/ ."
+	}
 }
