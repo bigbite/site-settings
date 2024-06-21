@@ -26,6 +26,7 @@ class BBSiteSettings {
 	 */
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'bb_site_settings_admin_assets' ] );
+		add_action( 'admin_menu', [ $this, 'bb_site_settings_admin_menu' ] );
 	}
 
 	/**
@@ -50,6 +51,22 @@ class BBSiteSettings {
 			plugins_url( 'build/style-index.css', __FILE__ ),
 			[],
 			$version
+		);
+	}
+
+	/**
+	 * Adds our site settings to admin menu panel
+	 */
+	public function bb_site_settings_admin_menu() {
+		add_menu_page(
+			__( 'Site Settings', 'bb_site_settings' ),
+			__( 'Site Settings', 'bb_site_settings' ),
+			'manage_options',
+			self::BB_SITE_SETTINGS,
+			function () {
+				echo '<div id="bb-site-settings"></div>';
+			},
+			'dashicons-admin-settings'
 		);
 	}
 }
