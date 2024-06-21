@@ -1,0 +1,26 @@
+version: 2.1
+
+orbs:
+  project: bigbite/project@1.2.1
+
+jobs:
+  build:
+    executor:
+      name: project/default
+      php: '8.2'
+    steps:
+      - checkout
+      - project/setup
+      - project/npm-install
+      - project/composer-install
+      - project/phpcs
+      - project/npm-build
+
+workflows:
+  workflow:
+    jobs:
+      - build:
+          context: bigbite
+          filters:
+            branches:
+              ignore: /^.*-built$/
