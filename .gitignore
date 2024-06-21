@@ -31,3 +31,12 @@ node_modules/
 
 # composer files
 vendor/
+
+# macos files
+.DS_Store
+
+# build output
+build/
+
+# build output map files
+*.map
