@@ -14,6 +14,8 @@ jobs:
       - project/npm-install
       - project/composer-install
       - project/phpcs
+      - project/phpstan:
+          memory_limit: '640M'
       - project/npm-build
 
 workflows:

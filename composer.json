@@ -1,6 +1,8 @@
 {
     "require-dev": {
-        "bigbite/phpcs-config": "^2.0"
+        "bigbite/phpcs-config": "^2.0",
+        "phpstan/phpstan": "^1.11",
+        "szepeviktor/phpstan-wordpress": "^1.3"
     },
     "config": {
         "allow-plugins": {
@@ -8,6 +10,7 @@
         }
     },
 	"scripts": {
-		"phpcs": "./vendor/bin/phpcs --ignore=build/ ."
+		"phpcs": "./vendor/bin/phpcs --ignore=build/ .",
+		"phpstan": "./vendor/bin/phpstan analyse --memory-limit=640M"
 	}
 }
