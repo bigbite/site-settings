@@ -9,6 +9,7 @@ import {
 	deleteSetting,
 	deleteAllSettings,
 } from '../services';
+import { validateSettings } from '../schema';
 
 // BBMSK-8 will add validated to settings
 
@@ -53,7 +54,10 @@ export const SiteSettingsProvider = ({ children }) => {
 		setError(null);
 
 		try {
+			await validateSettings(newSettings);
+
 			await saveSettings(newSettings);
+
 			setSettings(newSettings);
 		} catch (err) {
 			setError(err.message);
