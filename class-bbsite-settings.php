@@ -51,7 +51,7 @@ class BBSiteSettings {
 		wp_enqueue_style(
 			self::BB_SITE_SETTINGS,
 			plugins_url( 'build/style-index.css', __FILE__ ),
-			[],
+			[ 'wp-components' ],
 			$version
 		);
 	}

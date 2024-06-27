@@ -9,6 +9,7 @@ import {
 	deleteSetting,
 	deleteAllSettings,
 } from '../services';
+import { validateSettings } from '../schema';
 
 export const SiteSettingsProvider = ({ children }) => {
 	const [settings, setSettings] = useState({});
@@ -21,7 +22,11 @@ export const SiteSettingsProvider = ({ children }) => {
 
 		try {
 			const fetchedSettings = await getSettings();
-			setSettings(fetchedSettings);
+
+			if (fetchedSettings) {
+				await validateSettings(fetchedSettings);
+				setSettings(fetchedSettings);
+			}
 		} catch (err) {
 			setError(err.message);
 		} finally {
@@ -34,7 +39,10 @@ export const SiteSettingsProvider = ({ children }) => {
 		setError(null);
 
 		try {
+			await validateSettings(newSettings);
+
 			await saveSettings(newSettings);
+
 			setSettings(newSettings);
 		} catch (err) {
 			setError(err.message);

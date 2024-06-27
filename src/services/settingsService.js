@@ -1,14 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
 
-// BBMSK-8 will add validated to settings
-
 export const getSettings = async () => {
 	await wp.api.loadPromise.done();
 	const settingModel = new wp.api.models.Settings();
 	const response = await settingModel.fetch();
 
 	if (response.bb_site_settings_values) {
-		return JSON.parse(response.bb_site_settings_values);
+		const parsedSettings = JSON.parse(response.bb_site_settings_values);
+
+		return parsedSettings;
 	}
 };
 
@@ -21,6 +21,10 @@ export const saveSettings = async (newSettings) => {
 };
 
 export const addSetting = async (settings, category, newSetting) => {
+	if (!settings[category]) {
+		settings[category] = [];
+	}
+
 	return {
 		...settings,
 		[category]: [...settings[category], { ...newSetting, id: uuidv4() }],
