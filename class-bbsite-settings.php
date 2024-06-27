@@ -19,7 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class BBSiteSettings
  */
 class BBSiteSettings {
-	private const BB_SITE_SETTINGS = 'bb_site_settings';
+	private const BB_SITE_SETTINGS        = 'bb_site_settings';
+	private const BB_SITE_SETTINGS_VALUES = 'bb_site_settings_values';
 
 	/**
 	 * BBSiteSettings constructor.
@@ -27,6 +28,7 @@ class BBSiteSettings {
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'bb_site_settings_admin_assets' ] );
 		add_action( 'admin_menu', [ $this, 'bb_site_settings_admin_menu' ] );
+		add_action( 'rest_api_init', array( $this, 'bb_site_settings_register_settings' ) );
 	}
 
 	/**
@@ -35,7 +37,7 @@ class BBSiteSettings {
 	public function bb_site_settings_admin_assets() {
 		$asset_file = include plugin_dir_path( __FILE__ ) . 'build/index.asset.php';
 
-		$dependencies = $asset_file['dependencies'];
+		$dependencies = array_merge( $asset_file['dependencies'], [ 'wp-api' ] );
 		$version      = $asset_file['version'];
 
 		wp_enqueue_script(
@@ -68,6 +70,45 @@ class BBSiteSettings {
 			},
 			'dashicons-admin-settings'
 		);
+	}
+
+	/**
+	 * Register settings
+	 */
+	public function bb_site_settings_register_settings() {
+		register_setting(
+			self::BB_SITE_SETTINGS,
+			'bb_site_settings_values',
+			array(
+				'description'       => __( 'Website global settings values', 'bb_site_settings' ),
+				'type'              => 'string',
+				'show_in_rest'      => true,
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
+	}
+
+	/**
+	 * Get value of the setting from the options table.
+	 *
+	 * @param string $id Id of the setting.
+	 *
+	 * @return mixed
+	 */
+	public static function get_value( $id ) {
+		$option = json_decode( get_option( self::BB_SITE_SETTINGS_VALUES ), true );
+
+		if ( ! $option ) {
+			return null;
+		}
+
+		foreach ( $option as $item ) {
+			if ( $item['id'] === $id ) {
+				return $item['value'];
+			}
+		}
+
+		return null;
 	}
 }
 
