@@ -1,1 +1,2 @@
-export * from './SiteSettings';
+export * from './SiteSettingsContext';
+export * from './SiteSettingsProvider';
