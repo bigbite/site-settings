@@ -1,6 +1,7 @@
 import { getSupportedfields } from '../fields';
+import { getSupportedCategories } from './supportedCategories';
 
-const supportedCategories = ['general', 'analytics', 'styles'];
+const supportedCategories = getSupportedCategories();
 const fields = getSupportedfields();
 
 function isValidSetting(setting) {
@@ -11,8 +12,8 @@ function isValidSetting(setting) {
 		fields.includes(field) &&
 		value !== undefined &&
 		id !== undefined &&
-		typeof attributes === 'object' &&
-		attributes !== null
+		attributes !== undefined &&
+		typeof attributes === 'object'
 	);
 }
 
