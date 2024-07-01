@@ -89,13 +89,13 @@ class BBSiteSettings {
 	}
 
 	/**
-	 * Get value of the setting from the options table.
+	 * Get item from the options table.
 	 *
 	 * @param string $id Id of the setting.
 	 *
-	 * @return mixed
+	 * @return array|null
 	 */
-	public static function get_value( $id ) {
+	private static function get_option_item( $id ) {
 		$option = json_decode( get_option( self::BB_SITE_SETTINGS_VALUES ), true );
 
 		if ( ! $option ) {
@@ -104,11 +104,37 @@ class BBSiteSettings {
 
 		foreach ( $option as $item ) {
 			if ( $item['id'] === $id ) {
-				return $item['value'];
+				return $item;
 			}
 		}
 
 		return null;
+	}
+
+	/**
+	 * Get value of the setting from the options table.
+	 *
+	 * @param string $id Id of the setting.
+	 *
+	 * @return mixed
+	 */
+	public static function get_value( $id ) {
+		$item = self::get_option_item( $id );
+
+		return $item ? $item['value'] : null;
+	}
+
+	/**
+	 * Get attributes of the setting from the options table.
+	 *
+	 * @param string $id Id of the setting.
+	 *
+	 * @return mixed
+	 */
+	public static function get_attributes( $id ) {
+		$item = self::get_option_item( $id );
+
+		return $item ? $item['attributes'] : null;
 	}
 }
 

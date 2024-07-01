@@ -11,7 +11,7 @@ import {
 } from '../services';
 
 export const SiteSettingsProvider = ({ children }) => {
-	const [settings, setSettings] = useState({ general: [], analytics: [], styles: [] });
+	const [settings, setSettings] = useState({});
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
 
@@ -44,23 +44,23 @@ export const SiteSettingsProvider = ({ children }) => {
 	};
 
 	const handleAddSetting = async (category, newSetting) => {
-		const updatedSettings = await addSetting(settings, category, newSetting);
+		const updatedSettings = await addSetting({ ...settings }, category, newSetting);
 		await handleSaveSettings(updatedSettings);
 	};
 
 	const handleEditSetting = async (category, editedSetting) => {
-		const updatedSettings = await editSetting(settings, category, editedSetting);
+		const updatedSettings = await editSetting({ ...settings }, category, editedSetting);
 		await handleSaveSettings(updatedSettings);
 	};
 
 	const handleDeleteSetting = async (category, id) => {
-		const updatedSettings = await deleteSetting(settings, category, id);
+		const updatedSettings = await deleteSetting({ ...settings }, category, id);
 		await handleSaveSettings(updatedSettings);
 	};
 
 	const handleDeleteAllSettings = async () => {
 		await deleteAllSettings();
-		setSettings({ general: [], analytics: [], styles: [] });
+		setSettings({});
 	};
 
 	return (
