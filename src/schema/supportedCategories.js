@@ -15,7 +15,7 @@ const supportedCategories = {
 
 const getSupportedCategories = () => Object.keys(supportedCategories);
 
-const getSupportedCategoriesIcons = () => supportedCategories[category]?.icon;
+const getSupportedCategoriesIcons = (category) => supportedCategories[category]?.icon;
 
 const getSelectSupportedCategoriesOptions = () => [
 	{
@@ -24,7 +24,7 @@ const getSelectSupportedCategoriesOptions = () => [
 		value: '',
 	},
 	...Object.keys(supportedCategories).map((key) => ({
-		label: supportedFields[key].label,
+		label: supportedCategories[key].label,
 		value: key,
 	})),
 ];
