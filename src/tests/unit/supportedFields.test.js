@@ -1,18 +1,18 @@
 import { TextControl, ToggleControl, RadioControl } from '@wordpress/components';
-import CheckboxGroup from './CheckboxGroup';
+import CheckboxGroup from '../../fields/CheckboxGroup';
 import {
 	getComponent,
 	getAttributes,
 	getSelectSupportedOptions,
 	getSupportedfields,
-} from './supportedFields';
+} from '../../fields/supportedFields';
 
 jest.mock('@wordpress/components', () => ({
 	TextControl: jest.fn(),
 	ToggleControl: jest.fn(),
 	RadioControl: jest.fn(),
 }));
-jest.mock('./CheckboxGroup', () => jest.fn());
+jest.mock('../../fields/CheckboxGroup', () => jest.fn());
 
 describe('supportedFields', () => {
 	test('getSupportedfields returns correct field keys', () => {

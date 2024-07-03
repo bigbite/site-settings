@@ -14,6 +14,12 @@ jobs:
       - project/npm-install
       - project/composer-install
       - project/phpcs
+      - run:
+          name: Run unit tests
+          command: npm run test:unit
+      - run:
+          name: Run integration tests
+          command: npm run test:integration
       - project/npm-build
 
 workflows:

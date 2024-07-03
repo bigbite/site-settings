@@ -1,10 +1,10 @@
-import { validateSettings } from './settingSchema';
+import { validateSettings } from '../../schema';
 
-jest.mock('../fields', () => ({
+jest.mock('../../fields', () => ({
 	getSupportedfields: jest.fn().mockReturnValue(['text', 'radio']),
 }));
 
-jest.mock('./supportedCategories', () => ({
+jest.mock('../../schema/supportedCategories', () => ({
 	getSupportedCategories: jest.fn().mockReturnValue(['general', 'analytics']),
 }));
 

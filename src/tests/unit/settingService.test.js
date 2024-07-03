@@ -5,7 +5,7 @@ import {
 	editSetting,
 	deleteSetting,
 	deleteAllSettings,
-} from './settingsService';
+} from '../../services';
 import { v4 as uuidv4 } from 'uuid';
 
 jest.mock('uuid', () => ({

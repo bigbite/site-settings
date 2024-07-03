@@ -2,7 +2,7 @@ import {
 	getSelectSupportedCategoriesOptions,
 	getSupportedCategories,
 	getSupportedCategoriesIcons,
-} from './supportedCategories';
+} from '../../schema';
 
 describe('supportedCategories tests', () => {
 	describe('getSupportedCategories', () => {
