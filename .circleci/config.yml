@@ -16,6 +16,9 @@ jobs:
       - project/phpcs
       - project/phpstan:
           memory_limit: '640M'
+      - run:
+          name: Run js lint
+          command: npm run lint:js
       - project/npm-build
 
 workflows:

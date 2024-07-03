@@ -1,4 +1,8 @@
-import { TextControl, ToggleControl, RadioControl } from '@wordpress/components';
+import {
+	TextControl,
+	ToggleControl,
+	RadioControl,
+} from '@wordpress/components';
 
 import CheckboxGroup from './CheckboxGroup';
 
@@ -19,7 +23,7 @@ const supportedFields = {
 			checked: true,
 		},
 	},
-	['checkbox-group']: {
+	'checkbox-group': {
 		Component: CheckboxGroup,
 		label: 'Checkbox Group',
 		attributes: {
@@ -64,11 +68,11 @@ const supportedFields = {
 	},
 };
 
-const getSupportedfields = () => Object.keys(supportedFields);
+const getSupportedfields = () => Object.keys( supportedFields );
 
-const getComponent = (field) => supportedFields[field]?.Component;
+const getComponent = ( field ) => supportedFields[ field ]?.Component;
 
-const getAttributes = (field) => supportedFields[field]?.attributes;
+const getAttributes = ( field ) => supportedFields[ field ]?.attributes;
 
 const getSelectSupportedOptions = () => [
 	{
@@ -76,10 +80,15 @@ const getSelectSupportedOptions = () => [
 		label: 'Select field',
 		value: '',
 	},
-	...Object.keys(supportedFields).map((key) => ({
-		label: supportedFields[key].label,
+	...Object.keys( supportedFields ).map( ( key ) => ( {
+		label: supportedFields[ key ].label,
 		value: key,
-	})),
+	} ) ),
 ];
 
-export { getComponent, getAttributes, getSelectSupportedOptions, getSupportedfields };
+export {
+	getComponent,
+	getAttributes,
+	getSelectSupportedOptions,
+	getSupportedfields,
+};

@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"description": "Custom site settings configuration.",
 	"author": "Big Bite",
-	"prettier": "@bigbite/build-tools/configs/prettier",
+	"prettier": "@wordpress/prettier-config",
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",
 	"scripts": {
@@ -16,7 +16,6 @@
 		"start": "wp-scripts start"
 	},
 	"devDependencies": {
-		"@bigbite/build-tools": "^1.3.1",
 		"@wordpress/scripts": "^27.9.0"
 	},
 	"dependencies": {

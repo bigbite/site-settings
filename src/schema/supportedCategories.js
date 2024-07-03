@@ -13,9 +13,10 @@ const supportedCategories = {
 	},
 };
 
-const getSupportedCategories = () => Object.keys(supportedCategories);
+const getSupportedCategories = () => Object.keys( supportedCategories );
 
-const getSupportedCategoriesIcons = (category) => supportedCategories[category]?.icon;
+const getSupportedCategoriesIcons = ( category ) =>
+	supportedCategories[ category ]?.icon;
 
 const getSelectSupportedCategoriesOptions = () => [
 	{
@@ -23,10 +24,14 @@ const getSelectSupportedCategoriesOptions = () => [
 		label: 'Select category',
 		value: '',
 	},
-	...Object.keys(supportedCategories).map((key) => ({
-		label: supportedCategories[key].label,
+	...Object.keys( supportedCategories ).map( ( key ) => ( {
+		label: supportedCategories[ key ].label,
 		value: key,
-	})),
+	} ) ),
 ];
 
-export { getSupportedCategoriesIcons, getSelectSupportedCategoriesOptions, getSupportedCategories };
+export {
+	getSupportedCategoriesIcons,
+	getSelectSupportedCategoriesOptions,
+	getSupportedCategories,
+};
