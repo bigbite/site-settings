@@ -10,5 +10,5 @@ namespace Big_Bite\Site_Settings;
 function setup(): void {
 	new Loader();
 	new Admin();
-	new Rest_API();
+	new Rest_Api();
 }
