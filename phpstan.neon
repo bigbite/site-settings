@@ -1,0 +1,10 @@
+includes:
+  - vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+  level: 0
+  paths:
+    - class-bbsite-settings.php
+  # directories to include without analysing
+  scanDirectories:
+    - vendor
