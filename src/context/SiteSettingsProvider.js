@@ -21,7 +21,10 @@ export const SiteSettingsProvider = ({ children }) => {
 
 		try {
 			const fetchedSettings = await getSettings();
-			setSettings(fetchedSettings);
+
+			if (fetchSettings){
+				setSettings(fetchedSettings);
+			}
 		} catch (err) {
 			setError(err.message);
 		} finally {

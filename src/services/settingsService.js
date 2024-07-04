@@ -7,9 +7,7 @@ export const getSettings = async () => {
 	const settingModel = new wp.api.models.Settings();
 	const response = await settingModel.fetch();
 
-	if (response.bb_site_settings_values) {
-		return JSON.parse(response.bb_site_settings_values);
-	}
+	return response?.bb_site_settings_values ? JSON.parse(response.bb_site_settings_values) : undefined;
 };
 
 export const saveSettings = async (newSettings) => {
@@ -21,6 +19,10 @@ export const saveSettings = async (newSettings) => {
 };
 
 export const addSetting = async (settings, category, newSetting) => {
+	if ( ! settings[ category ] ) {
+		settings[ category ] = [];
+	}
+
 	return {
 		...settings,
 		[category]: [...settings[category], { ...newSetting, id: uuidv4() }],
