@@ -41,7 +41,7 @@ class Rest_Api {
 	private static function get_option_item( $id ) {
 		$option = get_option( BB_SITE_SETTINGS_VALUES );
 
-		if ( String !== $option ) {
+		if ( is_string( $option ) ) {
 			return null;
 		}
 
