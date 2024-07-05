@@ -38,7 +38,7 @@ class Rest_Api {
 	 *
 	 * @return array|null
 	 */
-	private static function get_option_item( $id ) {
+	private static function get_option_item( $id ): array|null {
 		$option = get_option( BB_SITE_SETTINGS_VALUES );
 
 		if ( is_string( $option ) ) {
@@ -63,7 +63,7 @@ class Rest_Api {
 	 *
 	 * @return mixed
 	 */
-	public static function get_value( $id ) {
+	public static function get_value( $id ): mixed {
 		$item = self::get_option_item( $id );
 
 		return $item ? $item['value'] : null;
@@ -76,7 +76,7 @@ class Rest_Api {
 	 *
 	 * @return mixed
 	 */
-	public static function get_attributes( $id ) {
+	public static function get_attributes( $id ): mixed {
 		$item = self::get_option_item( $id );
 
 		return $item ? $item['attributes'] : null;
