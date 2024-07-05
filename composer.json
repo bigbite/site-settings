@@ -4,11 +4,24 @@
         "phpstan/phpstan": "^1.11",
         "szepeviktor/phpstan-wordpress": "^1.3"
     },
+	"require": {
+		"automattic/jetpack-autoloader": "^2.10.1"
+	  },
     "config": {
         "allow-plugins": {
+			"automattic/jetpack-autoloader": true,
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
+	"autoload": {
+      "files": [
+        "inc/class-admin.php",
+		"inc/class-rest-api.php",
+		"inc/class-loader.php",
+		"inc/constants.php",
+        "inc/setup.php"
+      ]
+	},
 	"scripts": {
 		"phpcs": "./vendor/bin/phpcs --ignore=build/ .",
 		"phpstan": "./vendor/bin/phpstan analyse --memory-limit=640M"
