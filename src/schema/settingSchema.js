@@ -4,6 +4,12 @@ import { getSupportedCategories } from './supportedCategories';
 const supportedCategories = getSupportedCategories();
 const fields = getSupportedfields();
 
+/**
+ * Checks if the setting object is valid
+ *
+ * @param {Object} setting - setting object
+ * @return {boolean} - true if the setting is valid, false otherwise
+ */
 function isValidSetting( setting ) {
 	const { field, value, id, attributes } = setting;
 
@@ -17,6 +23,13 @@ function isValidSetting( setting ) {
 	);
 }
 
+/**
+ * Validates the settings object. Checks if the category is supported,
+ * if the settings are an array and if the settings are valid.
+ *
+ * @param {Object} settings - settings object
+ * @return {Promise<boolean | Error>} - true if the settings are valid, error otherwise
+ */
 function validateSettings( settings ) {
 	return new Promise( ( resolve, reject ) => {
 		for ( const [ category, categorySettings ] of Object.entries(

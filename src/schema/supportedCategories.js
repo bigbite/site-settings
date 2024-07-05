@@ -13,11 +13,28 @@ const supportedCategories = {
 	},
 };
 
+/**
+ * Returns an array of supported categories
+ *
+ * @return {string[]} An array of supported categories
+ */
 const getSupportedCategories = () => Object.keys( supportedCategories );
 
+/**
+ * Returns an icon of supported category
+ *
+ * @param {string} category - category name
+ *
+ * @return {string} Icon name
+ */
 const getSupportedCategoriesIcons = ( category ) =>
 	supportedCategories[ category ]?.icon;
 
+/**
+ * Returns an array of supported categories in select options format
+ *
+ * @return {Object[]} Array of supported categories options
+ */
 const getSelectSupportedCategoriesOptions = () => [
 	{
 		disabled: true,

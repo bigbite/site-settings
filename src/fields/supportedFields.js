@@ -68,12 +68,36 @@ const supportedFields = {
 	},
 };
 
+/**
+ * Returns an array of supported fields
+ *
+ * @return {string[]} Array of supported fields
+ */
 const getSupportedfields = () => Object.keys( supportedFields );
 
+/**
+ * Returns the component for a given field
+ *
+ * @param {string} field - field name
+ *
+ * @return {Component | undefined} Component for the given field
+ */
 const getComponent = ( field ) => supportedFields[ field ]?.Component;
 
+/**
+ * Returns the attributes for a given field
+ *
+ * @param {string} field - field name
+ *
+ * @return {Object | undefined} Attributes for the given field
+ */
 const getAttributes = ( field ) => supportedFields[ field ]?.attributes;
 
+/**
+ * Returns an array of supported fields in select options format
+ *
+ * @return {Object[]} Array of supported fields in select options format
+ */
 const getSelectSupportedOptions = () => [
 	{
 		disabled: true,
