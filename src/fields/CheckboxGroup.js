@@ -8,7 +8,7 @@ const CheckboxGroup = ( { label, options, onChange } ) => {
 			<legend>{ label }</legend>
 			{ options.map( ( option, index ) => (
 				<CheckboxControl
-					key={ index }
+					key={ option.label }
 					label={ option.label }
 					checked={ option.checked }
 					onChange={ ( value ) => {
