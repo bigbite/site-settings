@@ -13,11 +13,11 @@ import { SiteSettingsProvider } from './context';
  */
 import './style.scss';
 
-domReady(() => {
-	const root = createRoot(document.getElementById('bb-site-settings'));
+domReady( () => {
+	const root = createRoot( document.getElementById( 'bb-site-settings' ) );
 	root.render(
 		<SiteSettingsProvider>
 			<Settings />
-		</SiteSettingsProvider>,
+		</SiteSettingsProvider>
 	);
-});
+} );
