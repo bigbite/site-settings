@@ -40,3 +40,6 @@ build/
 
 # build output map files
 *.map
+
+# phpunit cache
+.phpunit.result.cache

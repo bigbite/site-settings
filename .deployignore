@@ -1,0 +1,4 @@
+# phpunit
+.phpunit.result.cache
+phpunit.xml.dist
+tests
