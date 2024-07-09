@@ -1,15 +1,19 @@
 import { Button, SelectControl } from '@wordpress/components';
-import { useState } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 
 import { useSettings } from '../../hooks';
 import { getSelectSupportedCategoriesOptions } from '../../schema';
-import { getSelectSupportedOptions } from '../../fields';
+import { getAttributes, getSelectSupportedOptions } from '../../fields';
+import SettingFieldConfig from './SettingFieldConfig';
 
 const AddSettingPanel = ( { handleClose } ) => {
 	const { loading, handleAddSetting } = useSettings();
-	const [ category, setCategory ] = useState( '' );
-	const [ field, setField ] = useState( '' );
-	const [ newSetting, setNewSetting ] = useState( null );
+	const [ category, setCategory ] = useState( 'general' );
+	const [ field, setField ] = useState( 'text' );
+	const [ newSetting, setNewSetting ] = useState( {
+		attributes: getAttributes( field ),
+		value: null,
+	} );
 
 	const categoryOptions = getSelectSupportedCategoriesOptions();
 	const fieldOptions = getSelectSupportedOptions();
@@ -31,7 +35,7 @@ const AddSettingPanel = ( { handleClose } ) => {
 	const handleSubmit = async ( event ) => {
 		event.preventDefault();
 
-		await handleAddSetting( category, newSetting );
+		await handleAddSetting( category, { field, ...newSetting } );
 
 		resetForm();
 	};
@@ -40,18 +44,20 @@ const AddSettingPanel = ( { handleClose } ) => {
 	 * Resets the form, clearing the category, field and new setting
 	 */
 	const resetForm = () => {
-		setCategory( '' );
-		setField( '' );
-		setNewSetting( null );
+		setNewSetting( { attributes: getAttributes( field ), value: null } );
 	};
+
+	useEffect( () => {
+		setNewSetting( { ...newSetting, attributes: getAttributes( field ) } );
+	}, [ field ] );
 
 	return (
 		<div className="add-settings-panel">
-			<div className="add-settings-panel__header">
-				<h2>Add Settings</h2>
-				<Button icon="no-alt" onClick={ handleClose } />
-			</div>
-			<form onSubmit={ handleSubmit }>
+			<form className="add-setting-panel__form" onSubmit={ handleSubmit }>
+				<div className="add-settings-panel__header">
+					<h2>Add Settings</h2>
+					<Button icon="no-alt" onClick={ handleClose } />
+				</div>
 				<SelectControl
 					options={ categoryOptions }
 					value={ category }
@@ -68,15 +74,21 @@ const AddSettingPanel = ( { handleClose } ) => {
 					required
 				/>
 
-				{ /* TODO BBMSK-17 add selected field config */ }
+				<SettingFieldConfig
+					field={ field }
+					setting={ newSetting }
+					setNewSetting={ setNewSetting }
+				/>
 
-				<Button
-					type="submit"
-					variant="primary"
-					disabled={ loading || ! isFormValid() }
-				>
-					Add Setting
-				</Button>
+				<div className="add-settings-panel__footer">
+					<Button
+						type="submit"
+						variant="primary"
+						disabled={ loading || ! isFormValid() }
+					>
+						Add Setting
+					</Button>
+				</div>
 			</form>
 		</div>
 	);

@@ -12,7 +12,7 @@ const supportedFields = {
 		label: 'Text',
 		attributes: {
 			label: 'Text Label',
-			value: 'Text Value',
+			value: '',
 		},
 	},
 	toggle: {

@@ -4,12 +4,24 @@
 	right: 0;
 	padding: 15px;
 	width: 350px;
-	height: 100%;
 	background-color: #fff;
+	height: calc(100% - 64px);
+  	overflow: auto;
+}
+
+.add-setting-panel__form {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
 }
 
 .add-settings-panel__header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+}
+
+.add-settings-panel__footer {
+	padding-top: 15px;
+	margin-top: auto;
 }
