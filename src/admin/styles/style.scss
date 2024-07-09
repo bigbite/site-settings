@@ -1,5 +1,5 @@
-.bb-site-settings {
-	background-color: #21759b;
-	color: #fff;
+#bb-site-settings {
 	padding: 2px;
 }
+
+@import './components/addSettingPanel.scss';
