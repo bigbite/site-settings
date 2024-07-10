@@ -34,37 +34,66 @@ class Rest_Api {
 	/**
 	 * Get item from the options table.
 	 *
+	 * @param string $category Category of the setting.
 	 * @param string $id Id of the setting.
 	 *
 	 * @return array|null
 	 */
-	private static function get_option_item( $id ): array|null {
+	private static function get_option_item( $category, $id ): array|null {
+		/**
+		 * Return settings values from the options table
+		 */
 		$option = get_option( BB_SITE_SETTINGS_VALUES );
 
-		if ( is_string( $option ) ) {
+		/**
+		 * Return settings values from the options table
+		 */
+		$decoded_option = json_decode( $option, true );
+
+		/**
+		 * $decoded_option should always be an array, if it's a string then return null
+		 */
+		if ( is_string( $decoded_option ) ) {
 			return null;
 		}
 
-		$decoded_option = json_decode( $option, true );
+		/**
+		 * Check if the provided category exists
+		 */
+		$target_category_values = $decoded_option[ $category ];
 
-		foreach ( $decoded_option as $item ) {
+		/**
+		 * If the category doesn't exist, return null
+		 */
+		if ( ! $target_category_values ) {
+			return null;
+		}
+
+		/**
+		 * Loop through category values to find the target ID
+		 */
+		foreach ( $target_category_values as $item ) {
 			if ( $item['id'] === $id ) {
 				return $item;
 			}
 		}
 
+		/**
+		 * If the ID is not found, return null
+		 */
 		return null;
 	}
 
 	/**
 	 * Get value of the setting from the options table.
 	 *
+	 * @param string $category Category of the setting.
 	 * @param string $id Id of the setting.
 	 *
 	 * @return mixed
 	 */
-	public static function get_value( $id ): mixed {
-		$item = self::get_option_item( $id );
+	public static function get_value( $category, $id ): mixed {
+		$item = self::get_option_item( $category, $id );
 
 		return $item ? $item['value'] : null;
 	}
@@ -72,12 +101,13 @@ class Rest_Api {
 	/**
 	 * Get attributes of the setting from the options table.
 	 *
+	 * @param string $category Category of the setting.
 	 * @param string $id Id of the setting.
 	 *
 	 * @return mixed
 	 */
-	public static function get_attributes( $id ): mixed {
-		$item = self::get_option_item( $id );
+	public static function get_attributes( $category, $id ): mixed {
+		$item = self::get_option_item( $category, $id );
 
 		return $item ? $item['attributes'] : null;
 	}
