@@ -1,4 +1,7 @@
-import { TextControl } from '@wordpress/components';
+import { TextControl, ToggleControl } from '@wordpress/components';
+
+import RadioFieldConfig from './RadioFieldConfig';
+import CheckboxGroupConfig from './CheckboxGroupConfig';
 
 const SettingFieldConfig = ( { field, setting, setNewSetting } ) => {
 	const handleAttributeChange = ( key, value ) => {
@@ -8,13 +11,6 @@ const SettingFieldConfig = ( { field, setting, setNewSetting } ) => {
 				...setting.attributes,
 				[ key ]: value,
 			},
-		} );
-	};
-
-	const handleValueChange = ( value ) => {
-		setNewSetting( {
-			...setting,
-			value,
 		} );
 	};
 
@@ -41,6 +37,40 @@ const SettingFieldConfig = ( { field, setting, setNewSetting } ) => {
 							} }
 						/>
 					</div>
+				) }
+
+				{ field === 'toggle' && (
+					<div className="setting-field-config__options">
+						<TextControl
+							required
+							label="Label for field"
+							value={ setting.attributes.label }
+							onChange={ ( value ) =>
+								handleAttributeChange( 'label', value )
+							}
+						/>
+						<ToggleControl
+							label="Value for field"
+							checked={ setting.attributes.checked }
+							onChange={ ( value ) => {
+								handleAttributeChange( 'checked', value );
+							} }
+						/>
+					</div>
+				) }
+
+				{ field === 'radio' && (
+					<RadioFieldConfig
+						setting={ setting }
+						handleAttributeChange={ handleAttributeChange }
+					/>
+				) }
+
+				{ field === 'checkbox-group' && (
+					<CheckboxGroupConfig
+						setting={ setting }
+						handleAttributeChange={ handleAttributeChange }
+					/>
 				) }
 			</div>
 		</div>

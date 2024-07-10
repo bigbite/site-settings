@@ -20,7 +20,7 @@ const supportedFields = {
 		label: 'Toggle',
 		attributes: {
 			label: 'Toggle Label',
-			checked: true,
+			checked: false,
 		},
 	},
 	'checkbox-group': {
@@ -31,7 +31,7 @@ const supportedFields = {
 			options: [
 				{
 					label: 'Checkbox 1',
-					checked: true,
+					checked: false,
 				},
 				{
 					label: 'Checkbox 2',
@@ -49,7 +49,7 @@ const supportedFields = {
 		label: 'Radio',
 		attributes: {
 			label: 'Radio Label',
-			selected: 2,
+			selected: null,
 			options: [
 				{
 					label: 'Option 1',

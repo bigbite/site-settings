@@ -1,4 +1,5 @@
 .add-settings-panel {
+	z-index: 1;
 	position: fixed;
 	top: 32px;
 	right: 0;
@@ -24,4 +25,27 @@
 .add-settings-panel__footer {
 	padding-top: 15px;
 	margin-top: auto;
+}
+
+
+.setting-field-config {
+	overflow-y: auto;
+	padding: 5px;
+}
+
+.setting-field-config__options {
+	margin: 20px 0;
+}
+
+.setting-field-config__option {
+	display: flex;
+	margin-bottom: 10px;
+}
+
+.setting-field-config__option-full {
+	width: 100%;
+}
+
+.setting-field-config__option button {
+	align-self: center;
 }
