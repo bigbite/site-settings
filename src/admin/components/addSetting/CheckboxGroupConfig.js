@@ -1,8 +1,14 @@
-import { Button, CheckboxControl, TextControl } from '@wordpress/components';
+import {
+	Button,
+	CheckboxControl,
+	Flex,
+	TextControl,
+} from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 
 const CheckboxGroupSetup = ( { setting, handleAttributeChange } ) => {
 	function handleAddCheckbox() {
-		let newCheckboxes = setting.attributes.options
+		const newCheckboxes = setting.attributes.options
 			? [ ...setting.attributes.options ]
 			: [];
 
@@ -12,7 +18,7 @@ const CheckboxGroupSetup = ( { setting, handleAttributeChange } ) => {
 	}
 
 	function handleDeleteCheckbox( checkboxIndex ) {
-		let newCheckboxes = [ ...setting.attributes.options ];
+		const newCheckboxes = [ ...setting.attributes.options ];
 
 		newCheckboxes.splice( checkboxIndex, 1 );
 
@@ -20,7 +26,7 @@ const CheckboxGroupSetup = ( { setting, handleAttributeChange } ) => {
 	}
 
 	function handleUpdateCheckbox( checkboxIndex, key, value ) {
-		let newCheckboxes = [ ...setting.attributes.options ];
+		const newCheckboxes = [ ...setting.attributes.options ];
 
 		newCheckboxes[ checkboxIndex ][ key ] = value;
 
@@ -31,50 +37,62 @@ const CheckboxGroupSetup = ( { setting, handleAttributeChange } ) => {
 		<>
 			<TextControl
 				required
-				label="Field Label"
+				label={ __( 'Field Label', 'bb_site_settings' ) }
 				value={ setting.attributes.label }
 				onChange={ ( value ) =>
 					handleAttributeChange( 'label', value )
 				}
 			/>
 			<div className="setting-field-config__options">
-				<h4>Checkbox options</h4>
+				<h4>{ __( 'Checkbox options', 'bb_site_settings' ) }</h4>
 				{ setting.attributes.options?.map(
 					( checkbox, checkboxIndex ) => (
 						<div
 							key={ checkboxIndex }
 							className="setting-field-config__option"
 						>
-							<div className="setting-field-config__option-full">
-								<TextControl
-									required
-									label="Checkbox Label"
-									value={ checkbox.label }
-									onChange={ ( value ) =>
-										handleUpdateCheckbox(
-											checkboxIndex,
-											'label',
-											value
-										)
+							<Flex>
+								<h5 className="setting-field-config__option-title">
+									{ __(
+										'Checkbox Configuration',
+										'bb_site_settings'
+									) }
+								</h5>
+								<Button
+									isDestructive
+									icon="trash"
+									onClick={ () =>
+										handleDeleteCheckbox( checkboxIndex )
 									}
 								/>
-								<CheckboxControl
-									label="Field Value"
-									checked={ checkbox.checked }
-									onChange={ ( value ) =>
-										handleUpdateCheckbox(
-											checkboxIndex,
-											'checked',
-											value
-										)
-									}
-								/>
-							</div>
-							<Button
-								isDestructive
-								icon="trash"
-								onClick={ () =>
-									handleDeleteCheckbox( checkboxIndex )
+							</Flex>
+							<TextControl
+								required
+								label={ __(
+									'Checkbox Label',
+									'bb_site_settings'
+								) }
+								value={ checkbox.label }
+								onChange={ ( value ) =>
+									handleUpdateCheckbox(
+										checkboxIndex,
+										'label',
+										value
+									)
+								}
+							/>
+							<CheckboxControl
+								label={ __(
+									'Field Value',
+									'bb_site_settings'
+								) }
+								checked={ checkbox.checked }
+								onChange={ ( value ) =>
+									handleUpdateCheckbox(
+										checkboxIndex,
+										'checked',
+										value
+									)
 								}
 							/>
 						</div>
@@ -83,7 +101,7 @@ const CheckboxGroupSetup = ( { setting, handleAttributeChange } ) => {
 			</div>
 
 			<Button variant="secondary" onClick={ handleAddCheckbox }>
-				Add checkbox
+				{ __( 'Add Option', 'bb_site_settings' ) }
 			</Button>
 		</>
 	);

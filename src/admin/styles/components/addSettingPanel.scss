@@ -7,7 +7,6 @@
 	width: 350px;
 	background-color: #fff;
 	height: calc(100% - 64px);
-  	overflow: auto;
 }
 
 .add-setting-panel__form {
@@ -38,14 +37,12 @@
 }
 
 .setting-field-config__option {
-	display: flex;
 	margin-bottom: 10px;
+	padding: 10px;
+	background-color: rgb(249, 241, 230);
 }
 
-.setting-field-config__option-full {
-	width: 100%;
-}
 
-.setting-field-config__option button {
-	align-self: center;
+.setting-field-config__option-title {
+	font-size: 1em;
 }

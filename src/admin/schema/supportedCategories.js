@@ -1,14 +1,16 @@
+import { __ } from '@wordpress/i18n';
+
 const supportedCategories = {
 	general: {
-		label: 'General',
+		label: __( 'General', 'bb_site_settings' ),
 		icon: 'settings',
 	},
 	analytics: {
-		label: 'Analytics',
+		label: __( 'Analytics', 'bb_site_settings' ),
 		icon: 'chart-line',
 	},
 	styles: {
-		label: 'Styles',
+		label: __( 'Styles', 'bb_site_settings' ),
 		icon: 'brush',
 	},
 };
@@ -38,7 +40,7 @@ const getSupportedCategoriesIcons = ( category ) =>
 const getSelectSupportedCategoriesOptions = () => [
 	{
 		disabled: true,
-		label: 'Select category',
+		label: __( 'Select category', 'bb_site_settings' ),
 		value: '',
 	},
 	...Object.keys( supportedCategories ).map( ( key ) => ( {

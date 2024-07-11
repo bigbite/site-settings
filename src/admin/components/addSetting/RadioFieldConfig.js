@@ -1,8 +1,9 @@
-import { Button, TextControl } from '@wordpress/components';
+import { Button, Flex, TextControl } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 
 const RadioFieldConfig = ( { setting, handleAttributeChange } ) => {
 	function handleAddOption() {
-		let newOptions = setting.attributes.options
+		const newOptions = setting.attributes.options
 			? [ ...setting.attributes.options ]
 			: [];
 		newOptions.push( { label: '', value: '' } );
@@ -11,14 +12,14 @@ const RadioFieldConfig = ( { setting, handleAttributeChange } ) => {
 	}
 
 	function handleDeleteOption( optionIndex ) {
-		let newOptions = [ ...setting.attributes.options ];
+		const newOptions = [ ...setting.attributes.options ];
 		newOptions.splice( optionIndex, 1 );
 
 		handleAttributeChange( 'options', newOptions );
 	}
 
 	function handleUpdateOption( optionIndex, key, value ) {
-		let newOptions = [ ...setting.attributes.options ];
+		const newOptions = [ ...setting.attributes.options ];
 		newOptions[ optionIndex ][ key ] = value;
 
 		handleAttributeChange( 'options', newOptions );
@@ -28,58 +29,65 @@ const RadioFieldConfig = ( { setting, handleAttributeChange } ) => {
 		<>
 			<TextControl
 				required
-				label="Field Label"
+				label={ __( 'Field Label', 'bb_site_settings' ) }
 				value={ setting.attributes.label }
 				onChange={ ( value ) =>
 					handleAttributeChange( 'label', value )
 				}
 			/>
 			<div className="setting-field-config__options">
-				<h4>Radio options</h4>
+				<h4>{ __( 'Radio options', 'bb_site_settings' ) }</h4>
 				{ setting.attributes.options?.map( ( option, optionIndex ) => (
 					<div
 						key={ optionIndex }
 						className="setting-field-config__option"
 					>
-						<div className="setting-field-config__option-full">
-							<TextControl
-								required
-								label="Option Label"
-								value={ option.label }
-								onChange={ ( value ) =>
-									handleUpdateOption(
-										optionIndex,
-										'label',
-										value
-									)
+						<Flex>
+							<h5 className="setting-field-config__option-title">
+								{ __(
+									'Option Configuration',
+									'bb_site_settings'
+								) }
+							</h5>
+							<Button
+								isDestructive
+								icon="trash"
+								onClick={ () =>
+									handleDeleteOption( optionIndex )
 								}
 							/>
+						</Flex>
+						<TextControl
+							required
+							label={ __( 'Option Label', 'bb_site_settings' ) }
+							value={ option.label }
+							onChange={ ( value ) =>
+								handleUpdateOption(
+									optionIndex,
+									'label',
+									value
+								)
+							}
+						/>
 
-							<TextControl
-								required
-								label="Option Value"
-								value={ option.value }
-								onChange={ ( value ) =>
-									handleUpdateOption(
-										optionIndex,
-										'value',
-										value
-									)
-								}
-							/>
-						</div>
-
-						<Button
-							isDestructive
-							icon="trash"
-							onClick={ () => handleDeleteOption( optionIndex ) }
+						<TextControl
+							required
+							label={ __( 'Option Value', 'bb_site_settings' ) }
+							value={ option.value }
+							onChange={ ( value ) =>
+								handleUpdateOption(
+									optionIndex,
+									'value',
+									value
+								)
+							}
 						/>
 					</div>
 				) ) }
 			</div>
 
 			<Button variant="secondary" onClick={ handleAddOption }>
-				Add option
+				{ __( 'Add Option', 'bb_site_settings' ) }
 			</Button>
 		</>
 	);

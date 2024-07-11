@@ -4,6 +4,9 @@ import { Button } from '@wordpress/components';
 import { AddSettingPanel } from './addSetting';
 import { useSettings } from '../hooks';
 
+/* Temporary code/ui BBMSK-9 */
+/* eslint-disable */
+
 const Settings = () => {
 	const [ showAddPanel, setShowAddPanel ] = useState( false );
 	const {
@@ -65,7 +68,6 @@ const Settings = () => {
 
 	return (
 		<>
-			{ /* Temporary UI changing in BBMSK-9 */ }
 			<div>
 				<h1>Settings</h1>
 				<Button

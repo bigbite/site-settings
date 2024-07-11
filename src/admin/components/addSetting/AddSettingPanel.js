@@ -1,5 +1,6 @@
 import { Button, SelectControl } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 
 import { useSettings } from '../../hooks';
 import { getSelectSupportedCategoriesOptions } from '../../schema';
@@ -55,7 +56,7 @@ const AddSettingPanel = ( { handleClose } ) => {
 		<div className="add-settings-panel">
 			<form className="add-setting-panel__form" onSubmit={ handleSubmit }>
 				<div className="add-settings-panel__header">
-					<h2>Add Settings</h2>
+					<h2>{ __( 'Add Settings', 'bb_site_settings' ) }</h2>
 					<Button icon="no-alt" onClick={ handleClose } />
 				</div>
 				<SelectControl
@@ -86,7 +87,7 @@ const AddSettingPanel = ( { handleClose } ) => {
 						variant="primary"
 						disabled={ loading || ! isFormValid() }
 					>
-						Add Setting
+						{ __( 'Add Settings', 'bb_site_settings' ) }
 					</Button>
 				</div>
 			</form>
