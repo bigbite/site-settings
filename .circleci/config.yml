@@ -1,31 +1,31 @@
 version: 2.1
 
 orbs:
-  project: bigbite/project@1.2.1
+    project: bigbite/project@1.2.1
 
 jobs:
-  build:
-    executor:
-      name: project/default
-      php: '8.2'
-    steps:
-      - checkout
-      - project/setup
-      - project/npm-install
-      - project/composer-install
-      - project/phpcs
-      - project/phpstan:
-          memory_limit: '640M'
-      - run:
-          name: Run js lint
-          command: npm run lint:js
-      - project/npm-build
+    build:
+        executor:
+            name: project/default
+            php: '8.2'
+        steps:
+            - checkout
+            - project/setup
+            - project/npm-install
+            - project/composer-install
+            - project/phpcs
+            - project/phpstan:
+                  memory_limit: '640M'
+            - run:
+                  name: Run js lint
+                  command: npm run lint:js
+            - project/npm-build
 
 workflows:
-  workflow:
-    jobs:
-      - build:
-          context: bigbite
-          filters:
-            branches:
-              ignore: /^.*-built$/
+    workflow:
+        jobs:
+            - build:
+                  context: bigbite
+                  filters:
+                      branches:
+                          ignore: /^.*-built$/
