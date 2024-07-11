@@ -28,6 +28,7 @@ const RadioFieldConfig = ( { setting, handleAttributeChange } ) => {
 	return (
 		<>
 			<TextControl
+				className="add-setting-panel__form-field--required"
 				required
 				label={ __( 'Field Label', 'bb_site_settings' ) }
 				value={ setting.attributes.label }
@@ -58,6 +59,7 @@ const RadioFieldConfig = ( { setting, handleAttributeChange } ) => {
 							/>
 						</Flex>
 						<TextControl
+							className="add-setting-panel__form-field--required"
 							required
 							label={ __( 'Option Label', 'bb_site_settings' ) }
 							value={ option.label }
@@ -71,6 +73,7 @@ const RadioFieldConfig = ( { setting, handleAttributeChange } ) => {
 						/>
 
 						<TextControl
+							className="add-setting-panel__form-field--required"
 							required
 							label={ __( 'Option Value', 'bb_site_settings' ) }
 							value={ option.value }

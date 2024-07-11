@@ -15,6 +15,15 @@
 	height: 100%;
 }
 
+.add-setting-panel__form-field--required label::after {
+	content: " *";
+	color: rgb(246, 17, 17);
+}
+
+.add-setting-panel__form-field--required input:focus:invalid {
+	border-color: rgb(246, 17, 17);
+}
+
 .add-settings-panel__header {
 	display: flex;
 	justify-content: space-between;

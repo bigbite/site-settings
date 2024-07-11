@@ -28,6 +28,7 @@ const SettingFieldConfig = ( { field, setting, setNewSetting } ) => {
 				{ field === 'text' && (
 					<div className="setting-field-config__options">
 						<TextControl
+							className="add-setting-panel__form-field--required"
 							required
 							label={ __(
 								'Label for field',
@@ -54,6 +55,7 @@ const SettingFieldConfig = ( { field, setting, setNewSetting } ) => {
 				{ field === 'toggle' && (
 					<div className="setting-field-config__options">
 						<TextControl
+							className="add-setting-panel__form-field--required"
 							required
 							label={ __(
 								'Label for field',

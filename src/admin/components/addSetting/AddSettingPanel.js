@@ -60,6 +60,7 @@ const AddSettingPanel = ( { handleClose } ) => {
 					<Button icon="no-alt" onClick={ handleClose } />
 				</div>
 				<SelectControl
+					className="add-setting-panel__form-field--required"
 					options={ categoryOptions }
 					value={ category }
 					onChange={ ( selected ) => setCategory( selected ) }
@@ -68,6 +69,7 @@ const AddSettingPanel = ( { handleClose } ) => {
 				/>
 
 				<SelectControl
+					className="add-setting-panel__form-field--required"
 					options={ fieldOptions }
 					value={ field }
 					onChange={ ( selected ) => setField( selected ) }

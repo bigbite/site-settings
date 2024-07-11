@@ -36,6 +36,7 @@ const CheckboxGroupSetup = ( { setting, handleAttributeChange } ) => {
 	return (
 		<>
 			<TextControl
+				className="add-setting-panel__form-field--required"
 				required
 				label={ __( 'Field Label', 'bb_site_settings' ) }
 				value={ setting.attributes.label }
@@ -67,6 +68,7 @@ const CheckboxGroupSetup = ( { setting, handleAttributeChange } ) => {
 								/>
 							</Flex>
 							<TextControl
+								className="add-setting-panel__form-field--required"
 								required
 								label={ __(
 									'Checkbox Label',
