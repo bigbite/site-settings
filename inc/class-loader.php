@@ -37,7 +37,7 @@ class Loader {
 		wp_enqueue_style(
 			BB_SITE_SETTINGS,
 			plugins_url( '../build/style-index.css', __FILE__ ),
-			[],
+			[ 'wp-components' ],
 			$version
 		);
 	}

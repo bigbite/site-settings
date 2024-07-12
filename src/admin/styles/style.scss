@@ -1,5 +1,5 @@
-.bb-site-settings {
-	background-color: #21759b;
-	color: #fff;
-	padding: 2px;
-}
+@import "./base.scss";
+@import "./variables.scss";
+
+@import "./components/navigationPanel.scss";
+@import "./components/settingsContainer.scss";

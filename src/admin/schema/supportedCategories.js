@@ -1,15 +1,17 @@
+import { page, chartBar, styles } from '@wordpress/icons';
+
 const supportedCategories = {
 	general: {
 		label: 'General',
-		icon: 'settings',
+		icon: page,
 	},
 	analytics: {
 		label: 'Analytics',
-		icon: 'chart-line',
+		icon: chartBar,
 	},
 	styles: {
 		label: 'Styles',
-		icon: 'brush',
+		icon: styles,
 	},
 };
 
@@ -21,14 +23,15 @@ const supportedCategories = {
 const getSupportedCategories = () => Object.keys( supportedCategories );
 
 /**
- * Returns an icon of supported category
+ * Returns an object of supported categories labels and icons to be used in the navigation
  *
- * @param {string} category - category name
- *
- * @return {string} Icon name
+ * @return {Object[]} Array of supported categories labels and icons
  */
-const getSupportedCategoriesIcons = ( category ) =>
-	supportedCategories[ category ]?.icon;
+const getNavigationCategoriesOptions = () =>
+	Object.keys( supportedCategories ).map( ( key ) => ( {
+		...supportedCategories[ key ],
+		id: key,
+	} ) );
 
 /**
  * Returns an array of supported categories in select options format
@@ -48,7 +51,7 @@ const getSelectSupportedCategoriesOptions = () => [
 ];
 
 export {
-	getSupportedCategoriesIcons,
 	getSelectSupportedCategoriesOptions,
 	getSupportedCategories,
+	getNavigationCategoriesOptions,
 };
