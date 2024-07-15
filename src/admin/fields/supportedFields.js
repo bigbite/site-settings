@@ -1,3 +1,4 @@
+import { __ } from '@wordpress/i18n';
 import {
 	TextControl,
 	ToggleControl,
@@ -9,7 +10,7 @@ import CheckboxGroup from './CheckboxGroup';
 const supportedFields = {
 	text: {
 		Component: TextControl,
-		label: 'Text',
+		label: __( 'Text', 'bb_site_settings' ),
 		attributes: {
 			label: 'Text Label',
 			value: 'Text Value',
@@ -17,7 +18,7 @@ const supportedFields = {
 	},
 	toggle: {
 		Component: ToggleControl,
-		label: 'Toggle',
+		label: __( 'Toggle', 'bb_site_settings' ),
 		attributes: {
 			label: 'Toggle Label',
 			checked: true,
@@ -25,7 +26,7 @@ const supportedFields = {
 	},
 	'checkbox-group': {
 		Component: CheckboxGroup,
-		label: 'Checkbox Group',
+		label: __( 'Checkbox Group', 'bb_site_settings' ),
 		attributes: {
 			label: 'Checkbox Group Label',
 			options: [
@@ -46,7 +47,7 @@ const supportedFields = {
 	},
 	radio: {
 		Component: RadioControl,
-		label: 'Radio',
+		label: __( 'Radio', 'bb_site_settings' ),
 		attributes: {
 			label: 'Radio Label',
 			selected: 2,
@@ -101,7 +102,7 @@ const getAttributes = ( field ) => supportedFields[ field ]?.attributes;
 const getSelectSupportedOptions = () => [
 	{
 		disabled: true,
-		label: 'Select field',
+		label: __( 'Select field', 'bb_site_settings' ),
 		value: '',
 	},
 	...Object.keys( supportedFields ).map( ( key ) => ( {
