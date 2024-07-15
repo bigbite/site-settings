@@ -4,7 +4,11 @@ import { __ } from '@wordpress/i18n';
 
 import { getNavigationCategoriesOptions } from '../schema';
 
-const NavigationPanel = ( { activeCategory, setActiveCategory } ) => {
+const NavigationPanel = ( {
+	activeCategory,
+	setActiveCategory,
+	showAddPanel,
+} ) => {
 	const categories = getNavigationCategoriesOptions();
 
 	return (
@@ -37,7 +41,7 @@ const NavigationPanel = ( { activeCategory, setActiveCategory } ) => {
 			</div>
 
 			<div className="navigation-panel__footer">
-				<Button variant="primary">
+				<Button variant="primary" onClick={ showAddPanel }>
 					{ __( 'Add Setting', 'bb_site_settings' ) }
 				</Button>
 			</div>
