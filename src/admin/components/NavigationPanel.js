@@ -4,7 +4,7 @@ import { __ } from '@wordpress/i18n';
 
 import { getNavigationCategoriesOptions } from '../schema';
 
-const NavigationPanel = ( { active, setActive } ) => {
+const NavigationPanel = ( { activeCategory, setActiveCategory } ) => {
 	const categories = getNavigationCategoriesOptions();
 
 	return (
@@ -21,9 +21,9 @@ const NavigationPanel = ( { active, setActive } ) => {
 					{ categories.map( ( { id, label, icon } ) => (
 						<li key={ id }>
 							<Button
-								onClick={ () => setActive( label ) }
+								onClick={ () => setActiveCategory( label ) }
 								variant={
-									active.toLowerCase() === id
+									activeCategory.toLowerCase() === id
 										? 'primary'
 										: 'tertiary'
 								}

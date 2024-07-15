@@ -4,15 +4,15 @@ import { useSettings } from '../hooks';
 
 // Placeholder UI - this will be replaced with the actual settings UI
 
-const SettingsContainer = ( { setting } ) => {
+const SettingsContainer = ( { category } ) => {
 	const { settings } = useSettings();
 
-	const filteredSettings = settings[ setting.toLowerCase() ];
+	const filteredSettings = settings[ category.toLowerCase() ];
 
 	return (
 		<div className="settings-container">
 			<div className="settings-container__header">
-				<h2>{ setting }</h2>
+				<h2>{ category }</h2>
 				<p>{ __( 'See your settings below', 'bb_site_settings' ) }</p>
 			</div>
 			<div className="settings-container__body">

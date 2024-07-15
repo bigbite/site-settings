@@ -4,7 +4,7 @@ import { useSettings } from './hooks';
 import { NavigationPanel, SettingsContainer } from './components';
 
 const Settings = () => {
-	const [ activeSetting, setActiveSetting ] = useState( 'General' );
+	const [ activeCategory, setActiveCategory ] = useState( 'General' );
 	const { fetchSettings } = useSettings();
 
 	useEffect( () => {
@@ -15,10 +15,10 @@ const Settings = () => {
 	return (
 		<>
 			<NavigationPanel
-				active={ activeSetting }
-				setActive={ setActiveSetting }
+				activeCategory={ activeCategory }
+				setActiveCategory={ setActiveCategory }
 			/>
-			<SettingsContainer setting={ activeSetting } />
+			<SettingsContainer category={ activeCategory } />
 		</>
 	);
 };
