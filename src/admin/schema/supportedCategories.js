@@ -1,15 +1,18 @@
+import { __ } from '@wordpress/i18n';
+import { page, chartBar, styles } from '@wordpress/icons';
+
 const supportedCategories = {
 	general: {
-		label: 'General',
-		icon: 'settings',
+		label: __( 'General', 'bb_site_settings' ),
+		icon: page,
 	},
 	analytics: {
-		label: 'Analytics',
-		icon: 'chart-line',
+		label: __( 'Analytics', 'bb_site_settings' ),
+		icon: chartBar,
 	},
 	styles: {
-		label: 'Styles',
-		icon: 'brush',
+		label: __( 'Styles', 'bb_site_settings' ),
+		icon: styles,
 	},
 };
 
@@ -21,14 +24,15 @@ const supportedCategories = {
 const getSupportedCategories = () => Object.keys( supportedCategories );
 
 /**
- * Returns an icon of supported category
+ * Returns an object of supported categories labels and icons to be used in the navigation
  *
- * @param {string} category - category name
- *
- * @return {string} Icon name
+ * @return {Object[]} Array of supported categories labels and icons
  */
-const getSupportedCategoriesIcons = ( category ) =>
-	supportedCategories[ category ]?.icon;
+const getNavigationCategoriesOptions = () =>
+	Object.keys( supportedCategories ).map( ( key ) => ( {
+		...supportedCategories[ key ],
+		id: key,
+	} ) );
 
 /**
  * Returns an array of supported categories in select options format
@@ -38,7 +42,7 @@ const getSupportedCategoriesIcons = ( category ) =>
 const getSelectSupportedCategoriesOptions = () => [
 	{
 		disabled: true,
-		label: 'Select category',
+		label: __( 'Select category', 'bb_site_settings' ),
 		value: '',
 	},
 	...Object.keys( supportedCategories ).map( ( key ) => ( {
@@ -48,7 +52,7 @@ const getSelectSupportedCategoriesOptions = () => [
 ];
 
 export {
-	getSupportedCategoriesIcons,
 	getSelectSupportedCategoriesOptions,
 	getSupportedCategories,
+	getNavigationCategoriesOptions,
 };
