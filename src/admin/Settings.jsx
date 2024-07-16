@@ -9,6 +9,7 @@ const Settings = () => {
 
 	useEffect( () => {
 		fetchSettings();
+		// Disabling the eslint rule, if added the function will be called on an endless loop.
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
