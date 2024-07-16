@@ -1,7 +1,7 @@
 /**
  * Format setting object, working out the value based on the field type.
  *
- * @param {string} field - field name
+ * @param {string} field   - field type
  * @param {Object} setting - setting object
  *
  * @return {Object} - formatted setting object with worked out value

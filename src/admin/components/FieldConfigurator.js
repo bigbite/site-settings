@@ -14,13 +14,13 @@ const FieldConfigurator = ( { field, setting, setNewSetting } ) => {
 		setNewSetting( {
 			...getAttributes( field ),
 		} );
-	}, [ field ] );
+	}, [ field, setNewSetting ] );
 
 	/**
 	 * Handle the attribute change for the setting
 	 *
-	 * @param {string} key - attribute key
-	 * @param {*} value - attribute value
+	 * @param {string} key   - attribute key
+	 * @param {*}      value - attribute value
 	 */
 	const handleAttributeChange = ( key, value ) => {
 		setNewSetting( {
