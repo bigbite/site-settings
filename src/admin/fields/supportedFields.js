@@ -13,7 +13,7 @@ const supportedFields = {
 		label: __( 'Text', 'bb_site_settings' ),
 		attributes: {
 			label: 'Text Label',
-			value: 'Text Value',
+			value: '',
 		},
 	},
 	toggle: {
@@ -21,7 +21,7 @@ const supportedFields = {
 		label: __( 'Toggle', 'bb_site_settings' ),
 		attributes: {
 			label: 'Toggle Label',
-			checked: true,
+			checked: false,
 		},
 	},
 	'checkbox-group': {
@@ -32,7 +32,7 @@ const supportedFields = {
 			options: [
 				{
 					label: 'Checkbox 1',
-					checked: true,
+					checked: false,
 				},
 				{
 					label: 'Checkbox 2',

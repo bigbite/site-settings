@@ -12,33 +12,27 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 15px;
+	padding: 10px 15px;
+	border-bottom: 1px solid #e5e5e5;
+	margin-bottom: 15px;
 }
 
 .add-settings-panel__body {
 	padding: 0 20px;
+	flex-grow: 1;
+	overflow: hidden;
+	overflow-y: auto;
 }
 
 .add-setting-panel__form {
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
 	height: var(--add-setting-panel-form-height);
-}
-
-.add-setting-panel__form-field--required label::after {
-	content: " *";
-	color: rgb(246, 17, 17);
-}
-
-.add-setting-panel__form-field--required input:focus:invalid {
-	border-color: rgb(246, 17, 17);
 }
 
 .add-settings-panel__footer {
 	border-top: 1px solid #e5e5e5;
 	padding: 25px;
-	text-align: center;
 }
 
 .add-settings-panel__footer button {
