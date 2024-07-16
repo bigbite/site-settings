@@ -1,10 +1,16 @@
 import { useEffect, useState } from '@wordpress/element';
 
 import { useSettings } from './hooks';
-import { NavigationPanel, SettingsContainer } from './components';
+import {
+	AddSettingPanel,
+	NavigationPanel,
+	SettingsContainer,
+} from './components';
 
 const Settings = () => {
 	const [ activeCategory, setActiveCategory ] = useState( 'General' );
+	const [ showAddPanel, setShowAddPanel ] = useState( false );
+
 	const { fetchSettings } = useSettings();
 
 	useEffect( () => {
@@ -18,8 +24,14 @@ const Settings = () => {
 			<NavigationPanel
 				activeCategory={ activeCategory }
 				setActiveCategory={ setActiveCategory }
+				showAddPanel={ () => setShowAddPanel( true ) }
 			/>
 			<SettingsContainer category={ activeCategory } />
+			{ showAddPanel && (
+				<AddSettingPanel
+					handleClose={ () => setShowAddPanel( false ) }
+				/>
+			) }
 		</>
 	);
 };
