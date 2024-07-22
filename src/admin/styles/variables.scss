@@ -4,4 +4,7 @@
 
 	// Panel height minus header height
 	--add-setting-panel-form-height: calc(100% - 82px);
+
+	// Settings body container height minus header height
+	--settings-body-container-height: calc(100% - 165px);
 }

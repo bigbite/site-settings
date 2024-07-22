@@ -16,7 +16,9 @@ const SettingsContainer = ( { category } ) => {
 				<p>{ __( 'See your settings below', 'bb_site_settings' ) }</p>
 			</div>
 			<div className="settings-container__body">
-				<pre>{ JSON.stringify( filteredSettings, null, 2 ) }</pre>
+				<pre className="settings-container__pre">
+					{ JSON.stringify( filteredSettings, null, 2 ) }
+				</pre>
 			</div>
 		</div>
 	);

@@ -1,9 +1,12 @@
-import { TextControl, ToggleControl } from '@wordpress/components';
+import {
+	CheckboxControl,
+	TextControl,
+	ToggleControl,
+} from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useEffect } from '@wordpress/element';
 
-import RadioFieldConfig from './RadioFieldConfig';
-import CheckboxGroupConfig from './CheckboxGroupConfig';
+import OptionConfig from './OptionConfig';
 import { getAttributes } from '../fields';
 
 const FieldConfigurator = ( { field, setting, setNewSetting } ) => {
@@ -53,7 +56,7 @@ const FieldConfigurator = ( { field, setting, setNewSetting } ) => {
 								'Label for field',
 								'bb_site_settings'
 							) }
-							value={ setting?.label }
+							value={ setting?.label || '' }
 							onChange={ ( value ) =>
 								handleAttributeChange( 'label', value )
 							}
@@ -67,7 +70,7 @@ const FieldConfigurator = ( { field, setting, setNewSetting } ) => {
 								'Value for field',
 								'bb_site_settings'
 							) }
-							value={ setting?.value }
+							value={ setting?.value || '' }
 							onChange={ ( value ) => {
 								handleAttributeChange( 'value', value );
 							} }
@@ -84,7 +87,7 @@ const FieldConfigurator = ( { field, setting, setNewSetting } ) => {
 								'Label for field',
 								'bb_site_settings'
 							) }
-							value={ setting?.label }
+							value={ setting?.label || '' }
 							onChange={ ( value ) =>
 								handleAttributeChange( 'label', value )
 							}
@@ -94,7 +97,7 @@ const FieldConfigurator = ( { field, setting, setNewSetting } ) => {
 								'Value for field',
 								'bb_site_settings'
 							) }
-							checked={ setting?.checked }
+							checked={ setting?.checked || false }
 							onChange={ ( value ) => {
 								handleAttributeChange( 'checked', value );
 							} }
@@ -103,16 +106,70 @@ const FieldConfigurator = ( { field, setting, setNewSetting } ) => {
 				) }
 
 				{ field === 'radio' && (
-					<RadioFieldConfig
+					<OptionConfig
 						setting={ setting }
 						handleAttributeChange={ handleAttributeChange }
+						optionsHeader={ __(
+							'Radio options',
+							'bb_site_settings'
+						) }
+						config={ {
+							newOption: { label: '', value: '' },
+							controls: [
+								{
+									type: TextControl,
+									label: __(
+										'Option Label',
+										'bb_site_settings'
+									),
+									updateField: 'label',
+									valueProp: 'value',
+								},
+								{
+									type: TextControl,
+									label: __(
+										'Option Value',
+										'bb_site_settings'
+									),
+									updateField: 'value',
+									valueProp: 'value',
+								},
+							],
+						} }
 					/>
 				) }
 
 				{ field === 'checkbox-group' && (
-					<CheckboxGroupConfig
+					<OptionConfig
 						setting={ setting }
 						handleAttributeChange={ handleAttributeChange }
+						optionsHeader={ __(
+							'Checkbox options',
+							'bb_site_settings'
+						) }
+						config={ {
+							newOption: { label: '', checked: false },
+							controls: [
+								{
+									type: TextControl,
+									label: __(
+										'Option Label',
+										'bb_site_settings'
+									),
+									updateField: 'label',
+									valueProp: 'value',
+								},
+								{
+									type: CheckboxControl,
+									label: __(
+										'Option Value',
+										'bb_site_settings'
+									),
+									updateField: 'checked',
+									valueProp: 'checked',
+								},
+							],
+						} }
 					/>
 				) }
 			</div>

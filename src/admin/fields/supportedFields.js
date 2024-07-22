@@ -50,7 +50,7 @@ const supportedFields = {
 		label: __( 'Radio', 'bb_site_settings' ),
 		attributes: {
 			label: 'Radio Label',
-			selected: 2,
+			selected: null,
 			options: [
 				{
 					label: 'Option 1',
