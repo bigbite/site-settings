@@ -1,5 +1,5 @@
 /**
- * Format setting object, working out the value based on the field type.
+ * Format setting object with required schema.
  *
  * @param {string} field   - field type
  * @param {Object} setting - setting object
@@ -7,6 +7,26 @@
  * @return {Object} - formatted setting object with worked out value
  */
 export function formatSetting( field, setting ) {
+	const value = workoutValue( field, setting );
+
+	return {
+		field,
+		value,
+		attributes: {
+			...setting,
+		},
+	};
+}
+
+/**
+ * Work out the value of a setting based on the field type.
+ *
+ * @param {string} field   - field type
+ * @param {Object} setting - setting object
+ *
+ * @return {*} - worked out value of the setting
+ */
+export function workoutValue( field, setting ) {
 	let value;
 
 	switch ( field ) {
@@ -28,11 +48,5 @@ export function formatSetting( field, setting ) {
 			value = null;
 	}
 
-	return {
-		field,
-		value,
-		attributes: {
-			...setting,
-		},
-	};
+	return value;
 }
