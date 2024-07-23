@@ -2,20 +2,22 @@ import { CheckboxControl } from '@wordpress/components';
 
 /* This component will be fleshed out in a later task */
 
-const CheckboxGroup = ( { label, options, onChange } ) => {
+const CheckboxGroup = ( { label, options, onChange, ...rest } ) => {
 	return (
 		<fieldset>
-			<legend>{ label }</legend>
+			<legend className="checkbox-group__label">{ label }</legend>
 			{ options.map( ( option, index ) => (
 				<CheckboxControl
-					key={ option.label }
+					key={ option.id }
 					label={ option.label }
 					checked={ option.checked }
 					onChange={ ( value ) => {
-						const newOptions = [ ...options ];
-						newOptions[ index ].checked = value;
-						onChange( newOptions );
+						// const newOptions = [ ...options ];
+						// newOptions[ index ].checked = value;
+						// onChange( newOptions );
+						onChange( value );
 					} }
+					{ ...rest }
 				/>
 			) ) }
 		</fieldset>
