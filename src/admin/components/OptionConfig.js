@@ -19,7 +19,7 @@ const OptionConfig = ( {
 	 */
 	const handleAddOption = () => {
 		const newOptions = setting?.options ? [ ...setting?.options ] : [];
-		newOptions.push( config.newOption );
+		newOptions.push( { ...config.newOption, id: uuidv4() } );
 
 		handleAttributeChange( 'options', newOptions );
 	};
@@ -65,7 +65,7 @@ const OptionConfig = ( {
 				{ setting?.options &&
 					setting.options?.map( ( option, optionIndex ) => (
 						<PanelBody
-							key={ uuidv4() }
+							key={ option.id }
 							title={ __(
 								`Option Configuration`,
 								'bb_site_settings'
@@ -79,6 +79,10 @@ const OptionConfig = ( {
 									) }
 								</h5>
 								<Button
+									label={ __(
+										`Delete Option`,
+										'bb_site_settings'
+									) }
 									isDestructive
 									icon="trash"
 									onClick={ () =>
@@ -86,33 +90,35 @@ const OptionConfig = ( {
 									}
 								/>
 							</PanelRow>
-							{ config.controls.map( ( control, controlKey ) => {
-								const Control = control.type;
-								/**
-								 * Dynamically set the prop based on the control valueProp,
-								 * getting the correct value from the option object.
-								 * E.g checked, value etc
-								 */
-								const dynamicProp = {
-									[ control.valueProp ]:
-										option[ control.updateField ],
-								};
+							{ config.controls.map(
+								( control, controlIndex ) => {
+									const Control = control.type;
+									/**
+									 * Dynamically set the prop based on the control valueProp,
+									 * getting the correct value from the option object.
+									 * E.g checked, value etc
+									 */
+									const dynamicProp = {
+										[ control.valueProp ]:
+											option[ control.updateField ],
+									};
 
-								return (
-									<Control
-										key={ controlKey }
-										label={ control.label }
-										{ ...dynamicProp }
-										onChange={ ( value ) =>
-											handleUpdateOption(
-												optionIndex,
-												control.updateField,
-												value
-											)
-										}
-									/>
-								);
-							} ) }
+									return (
+										<Control
+											key={ `${ option.id }-${ controlIndex }` }
+											label={ control.label }
+											{ ...dynamicProp }
+											onChange={ ( value ) =>
+												handleUpdateOption(
+													optionIndex,
+													control.updateField,
+													value
+												)
+											}
+										/>
+									);
+								}
+							) }
 						</PanelBody>
 					) ) }
 			</Panel>
