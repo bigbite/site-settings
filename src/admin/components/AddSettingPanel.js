@@ -2,9 +2,10 @@ import { Button, SelectControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
+import FieldConfigurator from './FieldConfigurator';
 import { useSettings } from '../hooks';
 import { getSelectSupportedOptions } from '../fields';
-import { getSelectSupportedCategoriesOptions } from '../schema';
+import { formatSetting, getSelectSupportedCategoriesOptions } from '../schema';
 
 const AddSettingPanel = ( { handleClose } ) => {
 	const { loading, handleAddSetting } = useSettings();
@@ -33,7 +34,7 @@ const AddSettingPanel = ( { handleClose } ) => {
 	const handleSubmit = async ( event ) => {
 		event.preventDefault();
 
-		await handleAddSetting( category, { field, ...newSetting } );
+		await handleAddSetting( category, formatSetting( field, newSetting ) );
 
 		resetForm();
 	};
@@ -61,7 +62,7 @@ const AddSettingPanel = ( { handleClose } ) => {
 			<form className="add-setting-panel__form" onSubmit={ handleSubmit }>
 				<div className="add-settings-panel__body">
 					<SelectControl
-						className="add-setting-panel__form-field--required"
+						className="form-field--required"
 						options={ categoryOptions }
 						value={ category }
 						onChange={ ( selected ) => setCategory( selected ) }
@@ -70,7 +71,7 @@ const AddSettingPanel = ( { handleClose } ) => {
 					/>
 
 					<SelectControl
-						className="add-setting-panel__form-field--required"
+						className="form-field--required"
 						options={ fieldOptions }
 						value={ field }
 						onChange={ ( selected ) => setField( selected ) }
@@ -78,7 +79,11 @@ const AddSettingPanel = ( { handleClose } ) => {
 						required
 					/>
 
-					{ /* TODO BBMSK-17 field config */ }
+					<FieldConfigurator
+						field={ field }
+						setting={ newSetting }
+						setNewSetting={ setNewSetting }
+					/>
 				</div>
 
 				<div className="add-settings-panel__footer">

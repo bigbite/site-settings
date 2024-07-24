@@ -4,6 +4,7 @@ import {
 	ToggleControl,
 	RadioControl,
 } from '@wordpress/components';
+import { v4 as uuidv4 } from 'uuid';
 
 import CheckboxGroup from './CheckboxGroup';
 
@@ -13,7 +14,7 @@ const supportedFields = {
 		label: __( 'Text', 'bb_site_settings' ),
 		attributes: {
 			label: 'Text Label',
-			value: 'Text Value',
+			value: '',
 		},
 	},
 	toggle: {
@@ -21,7 +22,7 @@ const supportedFields = {
 		label: __( 'Toggle', 'bb_site_settings' ),
 		attributes: {
 			label: 'Toggle Label',
-			checked: true,
+			checked: false,
 		},
 	},
 	'checkbox-group': {
@@ -32,15 +33,18 @@ const supportedFields = {
 			options: [
 				{
 					label: 'Checkbox 1',
-					checked: true,
+					checked: false,
+					id: uuidv4(),
 				},
 				{
 					label: 'Checkbox 2',
 					checked: false,
+					id: uuidv4(),
 				},
 				{
 					label: 'Checkbox 3',
 					checked: false,
+					id: uuidv4(),
 				},
 			],
 		},
@@ -50,19 +54,22 @@ const supportedFields = {
 		label: __( 'Radio', 'bb_site_settings' ),
 		attributes: {
 			label: 'Radio Label',
-			selected: 2,
+			selected: null,
 			options: [
 				{
 					label: 'Option 1',
 					value: 1,
+					id: uuidv4(),
 				},
 				{
 					label: 'Option 2',
 					value: 2,
+					id: uuidv4(),
 				},
 				{
 					label: 'Option 3',
 					value: 3,
+					id: uuidv4(),
 				},
 			],
 		},

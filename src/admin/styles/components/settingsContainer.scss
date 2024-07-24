@@ -11,4 +11,13 @@
 
 .settings-container__body {
 	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	height: var(--settings-body-container-height);
+}
+
+.settings-container__pre {
+	flex-grow: 1;
+	overflow: hidden;
+	overflow-y: auto;
 }
