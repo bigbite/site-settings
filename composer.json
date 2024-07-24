@@ -27,7 +27,7 @@
 		"phpcs": "./vendor/bin/phpcs --ignore=build/ .",
 		"phpstan": "./vendor/bin/phpstan analyse --memory-limit=640M",
 		"phpunit": "./vendor/bin/phpunit",
-		"pre-commit": [
+		"pre-push": [
 			"@phpcs",
 			"@phpstan",
 			"@phpunit"

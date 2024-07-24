@@ -1,0 +1,47 @@
+.add-settings-panel {
+	position: fixed;
+	top: 32px;
+	right: 0;
+	width: 350px;
+	background-color: #fff;
+	height: var(--site-settings-body-height);
+	box-shadow: -4px 0 8px -2px rgba(0, 0, 0, 0.2);
+}
+
+.add-settings-panel__header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 15px;
+}
+
+.add-settings-panel__body {
+	padding: 0 20px;
+}
+
+.add-setting-panel__form {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: var(--add-setting-panel-form-height);
+}
+
+.add-setting-panel__form-field--required label::after {
+	content: " *";
+	color: rgb(246, 17, 17);
+}
+
+.add-setting-panel__form-field--required input:focus:invalid {
+	border-color: rgb(246, 17, 17);
+}
+
+.add-settings-panel__footer {
+	border-top: 1px solid #e5e5e5;
+	padding: 25px;
+	text-align: center;
+}
+
+.add-settings-panel__footer button {
+	justify-content: center;
+	width: 100%;
+}
