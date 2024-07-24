@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { Button, Flex, FlexItem } from '@wordpress/components';
-import { cloudUpload, copy, trash } from '@wordpress/icons';
+import { copy, trash } from '@wordpress/icons';
 import { useEffect, useState } from '@wordpress/element';
 
 import { useSettings } from '../hooks';
@@ -14,34 +14,58 @@ const SettingsContainer = ( { category } ) => {
 	const [ localSettings, setLocalSettings ] = useState( {} );
 	const [ isDirty, setIsDirty ] = useState( false );
 
+	/**
+	 * Set the local settings to the settings from the hook(db), use these
+	 * for local changes before saving
+	 */
 	useEffect( () => {
 		setLocalSettings( settings );
 	}, [ settings ] );
 
+	/**
+	 * Handle the change of a setting
+	 *
+	 * @param {Object} setting - Current setting object
+	 * @param {*}      value   - The valure passed from the field component
+	 */
 	async function handleChange( setting, value ) {
+		// Get the key of the attribute to update
 		const key = getKeyProp( setting.field );
 
+		// Update the correct attribute with the new value
 		const updatedSetting = {
 			...setting,
 			attributes: { ...setting.attributes, [ key ]: value },
 		};
 
+		// Work out the new value for the setting
 		const updatedValue = workoutValue(
 			setting.field,
 			updatedSetting.attributes
 		);
 
+		// Update the setting with the new value
+		updatedSetting.value = updatedValue;
+
+		// Find the updated setting in the localSettings and update it
 		const updatedSettings = await editSetting(
-			localSettings,
+			{ ...localSettings },
 			category.toLowerCase(),
-			{ ...updatedSetting, value: updatedValue }
+			updatedSetting
 		);
 
+		// Update the localSettings with the updated setting
 		setLocalSettings( updatedSettings );
 
+		// Check if the settings are dirty
 		checkIfDirty( updatedSettings );
 	}
 
+	/**
+	 * Check if the settings are dirty comparing the updated settings with the original settings
+	 *
+	 * @param {Object} updatedSettings - The updated settings
+	 */
 	function checkIfDirty( updatedSettings ) {
 		// Compare updated settings with original settings to check for changes
 		const isModified = Object.keys( updatedSettings ).some(
@@ -52,12 +76,23 @@ const SettingsContainer = ( { category } ) => {
 		setIsDirty( isModified );
 	}
 
+	/**
+	 * Save the settings to the database, only if the changes are detected
+	 */
 	async function handleSave() {
 		if ( isDirty ) {
 			await handleSaveSettings( localSettings );
 
 			setIsDirty( false );
 		}
+	}
+
+	/**
+	 * Discard changes and reset the settings to the original settings
+	 */
+	function handleDiscard() {
+		setLocalSettings( settings );
+		setIsDirty( false );
 	}
 
 	return (
@@ -70,15 +105,23 @@ const SettingsContainer = ( { category } ) => {
 					</p>
 				</div>
 
-				<Button
-					label={ __( 'Save setting', 'bb_site_settings' ) }
-					text={ __( 'Save', 'bb_site_settings' ) }
-					disabled={ ! isDirty || loading }
-					variant="primary"
-					icon={ cloudUpload }
-					onClick={ handleSave }
-					isBusy={ loading }
-				/>
+				<div className="settings-container__header-button-group">
+					<Button
+						label={ __( 'Discard changes', 'bb_site_settings' ) }
+						text={ __( 'Discard', 'bb_site_settings' ) }
+						disabled={ ! isDirty }
+						variant="secondary"
+						onClick={ handleDiscard }
+					/>
+					<Button
+						label={ __( 'Save setting', 'bb_site_settings' ) }
+						text={ __( 'Save', 'bb_site_settings' ) }
+						disabled={ ! isDirty || loading }
+						variant="primary"
+						onClick={ handleSave }
+						isBusy={ loading }
+					/>
+				</div>
 			</div>
 			<div className="settings-container__body">
 				{ localSettings[ category.toLowerCase() ]?.map( ( setting ) => {

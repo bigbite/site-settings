@@ -12,6 +12,11 @@
 	border-bottom: 1px solid #e5e5e5;
 }
 
+.settings-container__header-button-group {
+	display: flex;
+	gap: 10px;
+}
+
 .settings-container__body {
 	padding: 20px;
 	display: flex;
