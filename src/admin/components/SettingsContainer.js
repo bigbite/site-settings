@@ -2,14 +2,14 @@ import { __ } from '@wordpress/i18n';
 import { Button, Flex, FlexItem } from '@wordpress/components';
 import { copy, trash } from '@wordpress/icons';
 import { useEffect, useMemo, useState } from '@wordpress/element';
-import { isEqual } from 'lodash';
+import { cloneDeep, isEqual } from 'lodash';
 
 import { useSettings } from '../hooks';
 import { getComponent, getKeyProp } from '../fields';
-import { editSetting } from '../services';
 import { workoutValue } from '../schema';
 
 const SettingsContainer = ( { category } ) => {
+	const categoryLowerCase = category.toLowerCase();
 	const { loading, settings, handleDeleteSetting, handleSaveSettings } =
 		useSettings();
 
@@ -24,7 +24,7 @@ const SettingsContainer = ( { category } ) => {
 	 * for local changes before saving
 	 */
 	useEffect( () => {
-		setLocalSettings( settings );
+		setLocalSettings( cloneDeep( settings ) );
 	}, [ settings ] );
 
 	/**
@@ -38,35 +38,32 @@ const SettingsContainer = ( { category } ) => {
 		const key = getKeyProp( setting.field );
 
 		// Update the correct attribute with the new value
-		const updatedSetting = {
-			...setting,
-			attributes: { ...setting.attributes, [ key ]: value },
-		};
+		setting.attributes[ key ] = value;
 
 		// Work out the new value for the setting
-		const updatedValue = workoutValue(
-			setting.field,
-			updatedSetting.attributes
+		setting.value = workoutValue( setting.field, setting.attributes );
+
+		// Map through localSettings and update the correct setting based on setting.id and replace
+		const updatedSettings = localSettings[ categoryLowerCase ].map(
+			( localSetting ) => {
+				if ( localSetting.id === setting.id ) {
+					return setting;
+				}
+				return localSetting;
+			}
 		);
 
-		// Update the setting with the new value
-		updatedSetting.value = updatedValue;
-
-		// Find the updated setting in the localSettings and update it
-		const updatedSettings = await editSetting(
-			{ ...localSettings },
-			category.toLowerCase(),
-			updatedSetting
-		);
-
-		// Update the localSettings with the updated setting
-		setLocalSettings( updatedSettings );
+		setLocalSettings( {
+			...localSettings,
+			[ categoryLowerCase ]: updatedSettings,
+		} );
 	}
 
 	/**
 	 * Save the settings to the database
 	 */
 	async function handleSave() {
+		// BBMSK-19 Notifications
 		await handleSaveSettings( localSettings );
 	}
 
@@ -74,7 +71,8 @@ const SettingsContainer = ( { category } ) => {
 	 * Discard changes and reset the localSettings to the original settings
 	 */
 	function handleDiscard() {
-		setLocalSettings( settings );
+		// BBMSK-19 Notifications
+		setLocalSettings( cloneDeep( settings ) );
 	}
 
 	return (
@@ -106,7 +104,7 @@ const SettingsContainer = ( { category } ) => {
 				</div>
 			</div>
 			<div className="settings-container__body">
-				{ localSettings[ category.toLowerCase() ]?.map( ( setting ) => {
+				{ localSettings[ categoryLowerCase ]?.map( ( setting ) => {
 					const Setting = getComponent( setting.field );
 
 					return (
@@ -127,6 +125,7 @@ const SettingsContainer = ( { category } ) => {
 										) }
 										icon={ copy }
 										onClick={ () => {
+											// BBMSK-19 Notifications
 											window.navigator.clipboard.writeText(
 												setting.id
 											);
@@ -146,8 +145,9 @@ const SettingsContainer = ( { category } ) => {
 										isDestructive
 										icon={ trash }
 										onClick={ () =>
+											// BBMSK-19 Notifications
 											handleDeleteSetting(
-												category.toLowerCase(),
+												categoryLowerCase,
 												setting.id
 											)
 										}
