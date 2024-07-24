@@ -1,7 +1,8 @@
 import { __ } from '@wordpress/i18n';
 import { Button, Flex, FlexItem } from '@wordpress/components';
 import { copy, trash } from '@wordpress/icons';
-import { useEffect, useState } from '@wordpress/element';
+import { useEffect, useMemo, useState } from '@wordpress/element';
+import { isEqual } from 'lodash';
 
 import { useSettings } from '../hooks';
 import { getComponent, getKeyProp } from '../fields';
@@ -11,8 +12,12 @@ import { workoutValue } from '../schema';
 const SettingsContainer = ( { category } ) => {
 	const { loading, settings, handleDeleteSetting, handleSaveSettings } =
 		useSettings();
+
 	const [ localSettings, setLocalSettings ] = useState( {} );
-	const [ isDirty, setIsDirty ] = useState( false );
+
+	const isDirty = useMemo( () => {
+		return ! isEqual( localSettings, settings );
+	}, [ localSettings, settings ] );
 
 	/**
 	 * Set the local settings to the settings from the hook(db), use these
@@ -56,43 +61,20 @@ const SettingsContainer = ( { category } ) => {
 
 		// Update the localSettings with the updated setting
 		setLocalSettings( updatedSettings );
-
-		// Check if the settings are dirty
-		checkIfDirty( updatedSettings );
 	}
 
 	/**
-	 * Check if the settings are dirty comparing the updated settings with the original settings
-	 *
-	 * @param {Object} updatedSettings - The updated settings
-	 */
-	function checkIfDirty( updatedSettings ) {
-		// Compare updated settings with original settings to check for changes
-		const isModified = Object.keys( updatedSettings ).some(
-			( key ) =>
-				updatedSettings[ key ] !==
-				settings[ category.toLowerCase() ][ key ]
-		);
-		setIsDirty( isModified );
-	}
-
-	/**
-	 * Save the settings to the database, only if the changes are detected
+	 * Save the settings to the database
 	 */
 	async function handleSave() {
-		if ( isDirty ) {
-			await handleSaveSettings( localSettings );
-
-			setIsDirty( false );
-		}
+		await handleSaveSettings( localSettings );
 	}
 
 	/**
-	 * Discard changes and reset the settings to the original settings
+	 * Discard changes and reset the localSettings to the original settings
 	 */
 	function handleDiscard() {
 		setLocalSettings( settings );
-		setIsDirty( false );
 	}
 
 	return (
