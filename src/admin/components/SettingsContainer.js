@@ -31,7 +31,7 @@ const SettingsContainer = ( { category } ) => {
 	 * Handle the change of a setting
 	 *
 	 * @param {Object} setting - Current setting object
-	 * @param {*}      value   - The valure passed from the field component
+	 * @param {*}      value   - The value passed from the field component
 	 */
 	async function handleChange( setting, value ) {
 		// Get the key of the attribute to update
