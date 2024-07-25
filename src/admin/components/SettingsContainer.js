@@ -104,65 +104,75 @@ const SettingsContainer = ( { category } ) => {
 				</div>
 			</div>
 			<div className="settings-container__body">
-				{ localSettings[ categoryLowerCase ]?.map( ( setting ) => {
-					const Setting = getComponent( setting.field );
+				{ localSettings[ categoryLowerCase ] &&
+				localSettings[ categoryLowerCase ].length > 0 ? (
+					localSettings[ categoryLowerCase ].map( ( setting ) => {
+						const Setting = getComponent( setting.field );
 
-					return (
-						<div
-							key={ setting.id }
-							className="settings-container__setting"
-						>
-							<Flex justify="flex-end">
-								<FlexItem>
-									<Button
-										label={ __(
-											'Copy ID',
-											'bb_site_settings'
-										) }
-										text={ __(
-											'Copy ID',
-											'bb_site_settings'
-										) }
-										icon={ copy }
-										onClick={ () => {
-											// BBMSK-19 Notifications
-											window.navigator.clipboard.writeText(
-												setting.id
-											);
-										} }
-									/>
-								</FlexItem>
-								<FlexItem>
-									<Button
-										label={ __(
-											'Delete setting',
-											'bb_site_settings'
-										) }
-										text={ __(
-											'Delete',
-											'bb_site_settings'
-										) }
-										isDestructive
-										icon={ trash }
-										onClick={ () =>
-											// BBMSK-19 Notifications
-											handleDeleteSetting(
-												categoryLowerCase,
-												setting.id
-											)
-										}
-									/>
-								</FlexItem>
-							</Flex>
-							<Setting
-								{ ...setting.attributes }
-								onChange={ ( value ) =>
-									handleChange( setting, value )
-								}
-							/>
-						</div>
-					);
-				} ) }
+						return (
+							<div
+								key={ setting.id }
+								className="settings-container__setting"
+							>
+								<Flex justify="flex-end">
+									<FlexItem>
+										<Button
+											label={ __(
+												'Copy ID',
+												'bb_site_settings'
+											) }
+											text={ __(
+												'Copy ID',
+												'bb_site_settings'
+											) }
+											icon={ copy }
+											onClick={ () => {
+												// BBMSK-19 Notifications
+												window.navigator.clipboard.writeText(
+													setting.id
+												);
+											} }
+										/>
+									</FlexItem>
+									<FlexItem>
+										<Button
+											label={ __(
+												'Delete setting',
+												'bb_site_settings'
+											) }
+											text={ __(
+												'Delete',
+												'bb_site_settings'
+											) }
+											isDestructive
+											icon={ trash }
+											onClick={ () =>
+												// BBMSK-19 Notifications
+												handleDeleteSetting(
+													categoryLowerCase,
+													setting.id
+												)
+											}
+										/>
+									</FlexItem>
+								</Flex>
+								<Setting
+									{ ...setting.attributes }
+									onChange={ ( value ) =>
+										handleChange( setting, value )
+									}
+								/>
+							</div>
+						);
+					} )
+				) : (
+					<p className="settings-container__not-found">
+						{ __(
+							'No settings found, please add one',
+							'bb_site_settings'
+						) }
+					</p>
+				) }
 			</div>
 		</div>
 	);
