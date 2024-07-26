@@ -137,6 +137,7 @@ export const SiteSettingsProvider = ( { children } ) => {
 				handleEditSetting,
 				handleDeleteSetting,
 				handleDeleteAllSettings,
+				handleSaveSettings,
 			} }
 		>
 			{ children }

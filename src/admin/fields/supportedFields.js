@@ -11,6 +11,7 @@ import CheckboxGroup from './CheckboxGroup';
 const supportedFields = {
 	text: {
 		Component: TextControl,
+		keyProp: 'value',
 		label: __( 'Text', 'bb_site_settings' ),
 		attributes: {
 			label: 'Text Label',
@@ -19,6 +20,7 @@ const supportedFields = {
 	},
 	toggle: {
 		Component: ToggleControl,
+		keyProp: 'checked',
 		label: __( 'Toggle', 'bb_site_settings' ),
 		attributes: {
 			label: 'Toggle Label',
@@ -27,6 +29,7 @@ const supportedFields = {
 	},
 	'checkbox-group': {
 		Component: CheckboxGroup,
+		keyProp: 'options',
 		label: __( 'Checkbox Group', 'bb_site_settings' ),
 		attributes: {
 			label: 'Checkbox Group Label',
@@ -51,6 +54,7 @@ const supportedFields = {
 	},
 	radio: {
 		Component: RadioControl,
+		keyProp: 'selected',
 		label: __( 'Radio', 'bb_site_settings' ),
 		attributes: {
 			label: 'Radio Label',
@@ -58,17 +62,17 @@ const supportedFields = {
 			options: [
 				{
 					label: 'Option 1',
-					value: 1,
+					value: '1',
 					id: uuidv4(),
 				},
 				{
 					label: 'Option 2',
-					value: 2,
+					value: '2',
 					id: uuidv4(),
 				},
 				{
 					label: 'Option 3',
-					value: 3,
+					value: '3',
 					id: uuidv4(),
 				},
 			],
@@ -102,6 +106,15 @@ const getComponent = ( field ) => supportedFields[ field ]?.Component;
 const getAttributes = ( field ) => supportedFields[ field ]?.attributes;
 
 /**
+ * Returns the key prop for a given field
+ *
+ * @param {string} field - field name
+ *
+ * @return {string | undefined} Key prop for the given field
+ */
+const getKeyProp = ( field ) => supportedFields[ field ]?.keyProp;
+
+/**
  * Returns an array of supported fields in select options format
  *
  * @return {Object[]} Array of supported fields in select options format
@@ -123,4 +136,5 @@ export {
 	getAttributes,
 	getSelectSupportedOptions,
 	getSupportedfields,
+	getKeyProp,
 };
