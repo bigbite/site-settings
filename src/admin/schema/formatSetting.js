@@ -7,7 +7,7 @@
  * @return {Object} - formatted setting object with worked out value
  */
 export function formatSetting( field, setting ) {
-	const value = workoutValue( field, setting );
+	const value = getSettingValue( field, setting );
 
 	return {
 		field,
@@ -26,7 +26,7 @@ export function formatSetting( field, setting ) {
  *
  * @return {*} - worked out value of the setting
  */
-export function workoutValue( field, setting ) {
+export function getSettingValue( field, setting ) {
 	let value;
 
 	switch ( field ) {

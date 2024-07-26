@@ -6,7 +6,7 @@ import { cloneDeep, isEqual } from 'lodash';
 
 import { useSettings } from '../hooks';
 import { getComponent, getKeyProp } from '../fields';
-import { workoutValue } from '../schema';
+import { getSettingValue } from '../schema';
 
 const SettingsContainer = ( { category } ) => {
 	const categoryLowerCase = category.toLowerCase();
@@ -41,7 +41,7 @@ const SettingsContainer = ( { category } ) => {
 		setting.attributes[ key ] = value;
 
 		// Work out the new value for the setting
-		setting.value = workoutValue( setting.field, setting.attributes );
+		setting.value = getSettingValue( setting.field, setting.attributes );
 
 		// Map through localSettings and update the correct setting based on setting.id and replace
 		const updatedSettings = localSettings[ categoryLowerCase ].map(
