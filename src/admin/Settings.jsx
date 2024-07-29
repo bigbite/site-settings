@@ -5,6 +5,8 @@ import {
 	AddSettingPanel,
 	NavigationPanel,
 	SettingsContainer,
+	SettingsNotice,
+	SettingsSnackbar,
 } from './components';
 
 const Settings = () => {
@@ -26,12 +28,16 @@ const Settings = () => {
 				setActiveCategory={ setActiveCategory }
 				showAddPanel={ () => setShowAddPanel( true ) }
 			/>
-			<SettingsContainer category={ activeCategory } />
+			<div className="settings">
+				<SettingsNotice />
+				<SettingsContainer category={ activeCategory } />
+			</div>
 			{ showAddPanel && (
 				<AddSettingPanel
 					handleClose={ () => setShowAddPanel( false ) }
 				/>
 			) }
+			<SettingsSnackbar />
 		</>
 	);
 };

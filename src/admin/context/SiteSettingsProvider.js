@@ -1,4 +1,7 @@
 import { useState } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+import { store as noticesStore } from '@wordpress/notices';
+import { useDispatch } from '@wordpress/data';
 
 import { SiteSettingsContext } from './SiteSettingsContext';
 import {
@@ -13,9 +16,10 @@ import { validateSettings } from '../schema';
 
 export const SiteSettingsProvider = ( { children } ) => {
 	const [ settings, setSettings ] = useState( {} );
-	const [ error, setError ] = useState( null );
 	const [ loading, setLoading ] = useState( false );
 
+	const { createErrorNotice, createSuccessNotice } =
+		useDispatch( noticesStore );
 	/**
 	 * Fetches the settings from the db (settingService).
 	 * Handles loading and error states.
@@ -24,7 +28,6 @@ export const SiteSettingsProvider = ( { children } ) => {
 	 */
 	const fetchSettings = async () => {
 		setLoading( true );
-		setError( null );
 
 		try {
 			const fetchedSettings = await getSettings();
@@ -34,7 +37,14 @@ export const SiteSettingsProvider = ( { children } ) => {
 				setSettings( fetchedSettings );
 			}
 		} catch ( err ) {
-			setError( err.message );
+			createErrorNotice(
+				__( 'Error fetching settings', 'bb_site_settings' ),
+				{
+					type: 'errorNotice',
+				}
+			);
+			// eslint-disable-next-line no-console
+			console.error( err.message );
 		} finally {
 			setLoading( false );
 		}
@@ -44,22 +54,34 @@ export const SiteSettingsProvider = ( { children } ) => {
 	 * Saves the new settings to the db (settingService).
 	 * Handles loading and error states.
 	 *
-	 * @param {Object} newSettings - new settings object to be saved to the db
+	 * @param {Object} newSettings   - new settings object to be saved to the db
+	 * @param {string} noticeMessage - message to display in the notice
 	 *
 	 * @return {Promise<void>}
 	 */
-	const handleSaveSettings = async ( newSettings ) => {
+	const handleSaveSettings = async (
+		newSettings,
+		noticeMessage = 'Settings saved'
+	) => {
 		setLoading( true );
-		setError( null );
 
 		try {
 			await validateSettings( newSettings );
 
 			await saveSettings( newSettings );
 
+			createSuccessNotice( noticeMessage, { type: 'snackbar' } );
+
 			setSettings( newSettings );
 		} catch ( err ) {
-			setError( err.message );
+			createErrorNotice(
+				__( 'Error saving settings', 'bb_site_settings' ),
+				{
+					type: 'errorNotice',
+				}
+			);
+			// eslint-disable-next-line no-console
+			console.error( err.message );
 		} finally {
 			setLoading( false );
 		}
@@ -79,7 +101,10 @@ export const SiteSettingsProvider = ( { children } ) => {
 			category,
 			newSetting
 		);
-		await handleSaveSettings( updatedSettings );
+		await handleSaveSettings(
+			updatedSettings,
+			__( 'Setting saved', 'bb_site_settings' )
+		);
 	};
 
 	/**
@@ -96,7 +121,10 @@ export const SiteSettingsProvider = ( { children } ) => {
 			category,
 			editedSetting
 		);
-		await handleSaveSettings( updatedSettings );
+		await handleSaveSettings(
+			updatedSettings,
+			__( 'Edited setting', 'bb_site_settings' )
+		);
 	};
 
 	/**
@@ -113,7 +141,10 @@ export const SiteSettingsProvider = ( { children } ) => {
 			category,
 			id
 		);
-		await handleSaveSettings( updatedSettings );
+		await handleSaveSettings(
+			updatedSettings,
+			__( 'Setting deleted', 'bb_site_settings' )
+		);
 	};
 
 	/**
@@ -130,7 +161,6 @@ export const SiteSettingsProvider = ( { children } ) => {
 		<SiteSettingsContext.Provider
 			value={ {
 				settings,
-				error,
 				loading,
 				fetchSettings,
 				handleAddSetting,
