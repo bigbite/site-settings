@@ -111,14 +111,20 @@ const SettingsContainer = ( { category } ) => {
 
 				<div className="settings-container__header-button-group">
 					<Button
-						label={ __( 'Discard changes', 'bb_site_settings' ) }
+						label={ __(
+							'Discard all local settings changes',
+							'bb_site_settings'
+						) }
 						text={ __( 'Discard', 'bb_site_settings' ) }
 						disabled={ ! isDirty }
 						variant="secondary"
 						onClick={ handleDiscard }
 					/>
 					<Button
-						label={ __( 'Save setting', 'bb_site_settings' ) }
+						label={ __(
+							'Save all local setting changes',
+							'bb_site_settings'
+						) }
 						text={ __( 'Save', 'bb_site_settings' ) }
 						disabled={ ! isDirty || loading }
 						variant="primary"
@@ -132,6 +138,7 @@ const SettingsContainer = ( { category } ) => {
 				localSettings[ categoryLowerCase ].length > 0 ? (
 					localSettings[ categoryLowerCase ].map( ( setting ) => {
 						const Setting = getComponent( setting.field );
+						const { label } = setting.attributes;
 
 						return (
 							<div
@@ -141,10 +148,10 @@ const SettingsContainer = ( { category } ) => {
 								<Flex justify="flex-end">
 									<FlexItem>
 										<Button
-											label={ __(
-												'Copy ID',
+											label={ ` ${ __(
+												'Copy ID for:',
 												'bb_site_settings'
-											) }
+											) } ${ label }` }
 											text={ __(
 												'Copy ID',
 												'bb_site_settings'
@@ -157,10 +164,10 @@ const SettingsContainer = ( { category } ) => {
 									</FlexItem>
 									<FlexItem>
 										<Button
-											label={ __(
-												'Delete setting',
+											label={ ` ${ __(
+												'Delete setting:',
 												'bb_site_settings'
-											) }
+											) } ${ label }` }
 											text={ __(
 												'Delete',
 												'bb_site_settings'

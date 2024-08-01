@@ -1,5 +1,4 @@
 import { Button } from '@wordpress/components';
-import { Icon } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 
 import { getNavigationCategoriesOptions } from '../schema';
@@ -27,7 +26,11 @@ const NavigationPanel = ( { activeCategory, setActiveCategory } ) => {
 										? 'primary'
 										: 'tertiary'
 								}
-								icon={ <Icon icon={ icon } /> }
+								label={ `${ label } ${ __(
+									'Settings',
+									'bb_site_settings'
+								) }` }
+								icon={ icon }
 							>
 								{ label }
 							</Button>

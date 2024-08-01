@@ -6,7 +6,9 @@ import {
 	TextControl,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { trash } from '@wordpress/icons';
 import { v4 as uuidv4 } from 'uuid';
+import classNames from 'classnames';
 
 const OptionConfig = ( {
 	setting,
@@ -55,7 +57,7 @@ const OptionConfig = ( {
 			<TextControl
 				className="form-field--required"
 				required
-				label={ __( 'Field Label', 'bb_site_settings' ) }
+				label={ __( 'Label for field', 'bb_site_settings' ) }
 				value={ setting?.label || '' }
 				onChange={ ( value ) =>
 					handleAttributeChange( 'label', value )
@@ -84,7 +86,8 @@ const OptionConfig = ( {
 										'bb_site_settings'
 									) }
 									isDestructive
-									icon="trash"
+									icon={ trash }
+									text={ __( 'Delete', 'bb_site_settings' ) }
 									onClick={ () =>
 										handleDeleteOption( optionIndex )
 									}
@@ -105,8 +108,13 @@ const OptionConfig = ( {
 
 									return (
 										<Control
+											className={ classNames( {
+												'form-field--required':
+													control.required,
+											} ) }
 											key={ `${ option.id }-${ controlIndex }` }
 											label={ control.label }
+											required={ control.required }
 											{ ...dynamicProp }
 											onChange={ ( value ) =>
 												handleUpdateOption(
@@ -122,7 +130,11 @@ const OptionConfig = ( {
 						</PanelBody>
 					) ) }
 			</Panel>
-			<Button variant="secondary" onClick={ handleAddOption }>
+			<Button
+				label={ __( 'Add new option', 'bb_site_settings' ) }
+				variant="secondary"
+				onClick={ handleAddOption }
+			>
 				{ __( `Add Option`, 'bb_site_settings' ) }
 			</Button>
 		</>
