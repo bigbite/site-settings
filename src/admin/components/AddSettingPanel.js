@@ -1,4 +1,4 @@
-import { Button, Icon, SelectControl } from '@wordpress/components';
+import { Button, SelectControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { close, plus } from '@wordpress/icons';
@@ -60,7 +60,7 @@ const AddSettingPanel = () => {
 								'bb_site_settings'
 							) }
 							tooltipPosition="middle left"
-							icon={ <Icon icon={ close } /> }
+							icon={ close }
 							onClick={ () => setShowAddPanel( false ) }
 						/>
 					</div>
@@ -125,7 +125,7 @@ const AddSettingPanel = () => {
 					) }
 					tooltipPosition="middle left"
 					variant="primary"
-					icon={ <Icon icon={ plus } /> }
+					icon={ plus }
 					onClick={ () => setShowAddPanel( true ) }
 				/>
 			) }
