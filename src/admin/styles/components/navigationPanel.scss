@@ -1,4 +1,4 @@
-.naviation-panel {
+.navigation-panel {
 	min-width: 350px;
 	max-width: 350px;
 	background-color: #fff;
@@ -7,10 +7,22 @@
 	justify-content: space-between;
 }
 
-.naviation-panel button {
+.navigation-panel button {
 	width: 100%;
+	justify-content: space-between;
+	height: 40px;
+}
+
+.navigation-panel button[aria-selected="false"] {
+	color: var(--site-settings-text-color);
 }
 
 .navigation-panel__body {
 	padding: 25px 20px;
+}
+
+.navigation-panel__button-label {
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
