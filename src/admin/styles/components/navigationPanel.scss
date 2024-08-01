@@ -1,6 +1,6 @@
 .naviation-panel {
-	min-width: 250px;
-	height: 100%;
+	min-width: 350px;
+	max-width: 350px;
 	background-color: #fff;
 	display: flex;
 	flex-direction: column;
@@ -13,14 +13,4 @@
 
 .navigation-panel__body {
 	padding: 25px 20px;
-}
-
-.navigation-panel__footer {
-	border-top: 1px solid #e5e5e5;
-	padding: 25px;
-	text-align: center;
-}
-
-.navigation-panel__footer button {
-	justify-content: center;
 }

@@ -1,17 +1,19 @@
-import { Button, SelectControl } from '@wordpress/components';
+import { Button, Icon, SelectControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { close, plus } from '@wordpress/icons';
 
 import FieldConfigurator from './FieldConfigurator';
 import { useSettings } from '../hooks';
 import { getSelectSupportedOptions } from '../fields';
 import { formatSetting, getSelectSupportedCategoriesOptions } from '../schema';
 
-const AddSettingPanel = ( { handleClose } ) => {
+const AddSettingPanel = () => {
 	const { loading, handleAddSetting } = useSettings();
 	const [ category, setCategory ] = useState( 'general' );
 	const [ field, setField ] = useState( 'text' );
 	const [ newSetting, setNewSetting ] = useState( null );
+	const [ showAddPanel, setShowAddPanel ] = useState( false );
 
 	const categoryOptions = getSelectSupportedCategoriesOptions();
 	const fieldOptions = getSelectSupportedOptions();
@@ -47,62 +49,87 @@ const AddSettingPanel = ( { handleClose } ) => {
 	};
 
 	return (
-		<div className="add-settings-panel">
-			<div className="add-settings-panel__header">
-				<h2>{ __( 'Add Settings', 'bb_site_settings' ) }</h2>
+		<>
+			{ showAddPanel && (
+				<div className="add-settings-panel">
+					<div className="add-settings-panel__header">
+						<h2>{ __( 'Add Settings', 'bb_site_settings' ) }</h2>
+						<Button
+							label={ __(
+								'Close add setting sidebar',
+								'bb_site_settings'
+							) }
+							tooltipPosition="middle left"
+							icon={ <Icon icon={ close } /> }
+							onClick={ () => setShowAddPanel( false ) }
+						/>
+					</div>
+					<form
+						className="add-setting-panel__form"
+						onSubmit={ handleSubmit }
+					>
+						<div className="add-settings-panel__body">
+							<SelectControl
+								className="form-field--required"
+								options={ categoryOptions }
+								value={ category }
+								onChange={ ( selected ) =>
+									setCategory( selected )
+								}
+								label="Category"
+								required
+							/>
+
+							<SelectControl
+								className="form-field--required"
+								options={ fieldOptions }
+								value={ field }
+								onChange={ ( selected ) =>
+									setField( selected )
+								}
+								label="Field"
+								required
+							/>
+
+							<FieldConfigurator
+								field={ field }
+								setting={ newSetting }
+								setNewSetting={ setNewSetting }
+							/>
+						</div>
+
+						<div className="add-settings-panel__footer">
+							<Button
+								label={ __(
+									'Save new setting',
+									'bb_site_settings'
+								) }
+								type="submit"
+								variant="primary"
+								disabled={ loading || ! isFormValid() }
+								aria-busy={ loading }
+								isBusy={ loading }
+							>
+								{ __( 'Save', 'bb_site_settings' ) }
+							</Button>
+						</div>
+					</form>
+				</div>
+			) }
+			{ ! showAddPanel && (
 				<Button
-					aria-label={ __(
-						'Close add setting panel',
+					className="add-setting__fab"
+					label={ __(
+						'Open add setting sidebar',
 						'bb_site_settings'
 					) }
-					icon="no-alt"
-					onClick={ handleClose }
+					tooltipPosition="middle left"
+					variant="primary"
+					icon={ <Icon icon={ plus } /> }
+					onClick={ () => setShowAddPanel( true ) }
 				/>
-			</div>
-			<form className="add-setting-panel__form" onSubmit={ handleSubmit }>
-				<div className="add-settings-panel__body">
-					<SelectControl
-						className="form-field--required"
-						options={ categoryOptions }
-						value={ category }
-						onChange={ ( selected ) => setCategory( selected ) }
-						label="Category"
-						required
-					/>
-
-					<SelectControl
-						className="form-field--required"
-						options={ fieldOptions }
-						value={ field }
-						onChange={ ( selected ) => setField( selected ) }
-						label="Field"
-						required
-					/>
-
-					<FieldConfigurator
-						field={ field }
-						setting={ newSetting }
-						setNewSetting={ setNewSetting }
-					/>
-				</div>
-
-				<div className="add-settings-panel__footer">
-					<Button
-						aria-label={ __(
-							'Save new setting',
-							'bb_site_settings'
-						) }
-						type="submit"
-						variant="primary"
-						disabled={ loading || ! isFormValid() }
-						aria-busy={ loading }
-						isBusy={ loading }
-					>
-						{ __( 'Save', 'bb_site_settings' ) }
-					</Button>
-				</div>
-			</form>
-		</div>
+			) }
+		</>
 	);
 };
 

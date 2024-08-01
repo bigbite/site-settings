@@ -11,7 +11,6 @@ import {
 
 const Settings = () => {
 	const [ activeCategory, setActiveCategory ] = useState( 'General' );
-	const [ showAddPanel, setShowAddPanel ] = useState( false );
 
 	const { fetchSettings } = useSettings();
 
@@ -26,17 +25,12 @@ const Settings = () => {
 			<NavigationPanel
 				activeCategory={ activeCategory }
 				setActiveCategory={ setActiveCategory }
-				showAddPanel={ () => setShowAddPanel( true ) }
 			/>
 			<div className="settings">
 				<SettingsNotice />
 				<SettingsContainer category={ activeCategory } />
 			</div>
-			{ showAddPanel && (
-				<AddSettingPanel
-					handleClose={ () => setShowAddPanel( false ) }
-				/>
-			) }
+			<AddSettingPanel />
 			<SettingsSnackbar />
 		</>
 	);
