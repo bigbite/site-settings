@@ -1,13 +1,14 @@
-import { Button } from '@wordpress/components';
+import { Button, Icon } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 import { getNavigationCategoriesOptions } from '../schema';
+import { chevronRightSmall } from '@wordpress/icons';
 
 const NavigationPanel = ( { activeCategory, setActiveCategory } ) => {
 	const categories = getNavigationCategoriesOptions();
 
 	return (
-		<div className="naviation-panel">
+		<div className="navigation-panel">
 			<div className="navigation-panel__body">
 				<h2>{ __( 'Site Settings', 'bb_site_settings' ) }</h2>
 				<p>
@@ -16,10 +17,18 @@ const NavigationPanel = ( { activeCategory, setActiveCategory } ) => {
 						'bb_site_settings'
 					) }
 				</p>
-				<ul>
+				<ul
+					aria-label={ __(
+						'Navigation Categories',
+						'bb_site_settings'
+					) }
+				>
 					{ categories.map( ( { id, label, icon } ) => (
 						<li key={ id }>
 							<Button
+								aria-selected={
+									activeCategory.toLowerCase() === id
+								}
 								onClick={ () => setActiveCategory( label ) }
 								variant={
 									activeCategory.toLowerCase() === id
@@ -30,9 +39,12 @@ const NavigationPanel = ( { activeCategory, setActiveCategory } ) => {
 									'Settings',
 									'bb_site_settings'
 								) }` }
-								icon={ icon }
 							>
-								{ label }
+								<span className="navigation-panel__button-label">
+									<Icon icon={ icon } />
+									{ label }
+								</span>
+								<Icon icon={ chevronRightSmall } />
 							</Button>
 						</li>
 					) ) }
