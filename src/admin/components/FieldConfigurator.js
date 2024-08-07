@@ -120,7 +120,6 @@ const FieldConfigurator = ( { field, setting, setNewSetting } ) => {
 								},
 								{
 									type: TextControl,
-									required: false,
 									label: __(
 										'Option Value',
 										'bb_site_settings'
@@ -156,7 +155,6 @@ const FieldConfigurator = ( { field, setting, setNewSetting } ) => {
 								},
 								{
 									type: CheckboxControl,
-									required: false,
 									label: __(
 										'Option Value',
 										'bb_site_settings'
