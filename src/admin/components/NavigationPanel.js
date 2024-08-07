@@ -1,8 +1,10 @@
 import { Button, Icon } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-
-import { getNavigationCategoriesOptions } from '../schema';
 import { chevronRightSmall } from '@wordpress/icons';
+
+import ExportSettings from './ExportSettings';
+import ImportSettings from './ImportSettings';
+import { getNavigationCategoriesOptions } from '../schema';
 
 const NavigationPanel = ( { activeCategory, setActiveCategory } ) => {
 	const categories = getNavigationCategoriesOptions();
@@ -49,6 +51,10 @@ const NavigationPanel = ( { activeCategory, setActiveCategory } ) => {
 						</li>
 					) ) }
 				</ul>
+			</div>
+			<div className="navigation-panel__footer">
+				<ExportSettings />
+				<ImportSettings />
 			</div>
 		</div>
 	);
