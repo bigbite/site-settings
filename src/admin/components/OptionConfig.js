@@ -99,45 +99,6 @@ const OptionConfig = ( {
 		);
 	};
 
-	/**
-	 * Render the control component based on the control object
-	 * and set the correct props based on the option object
-	 * and the control object.
-	 *
-	 * @param {Object} control      - The control object
-	 * @param {Object} option       - The option object
-	 * @param {number} optionIndex  - The key of the option
-	 * @param {number} controlIndex - The key of the control
-	 *
-	 * @return {Component} - The control component with the correct props
-	 */
-	const renderControl = ( control, option, optionIndex, controlIndex ) => {
-		const Control = control.component;
-		/**
-		 * Dynamically set the prop based on the control componentProp,
-		 * getting the correct value from the option object.
-		 * E.g checked, value etc
-		 */
-		const dynamicProp = {
-			[ control.componentProp ]: option[ control.optionKey ],
-		};
-
-		return (
-			<Control
-				className={ classNames( {
-					'form-field--required': control.required,
-				} ) }
-				key={ `${ option.id }-${ controlIndex }` }
-				label={ control.label }
-				required={ control.required }
-				{ ...dynamicProp }
-				onChange={ ( value ) =>
-					handleUpdateOption( optionIndex, control.optionKey, value )
-				}
-			/>
-		);
-	};
-
 	return (
 		<>
 			<TextControl

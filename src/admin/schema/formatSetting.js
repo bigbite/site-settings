@@ -44,6 +44,9 @@ export function getSettingValue( field, setting ) {
 		case 'radio':
 			value = setting.selected || null;
 			break;
+		case 'color-palette':
+			value = setting.value || null;
+			break;
 		default:
 			value = null;
 	}
