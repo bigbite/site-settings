@@ -25,11 +25,13 @@
 	},
 	"dependencies": {
 		"@wordpress/components": "^28.2.0",
+		"@wordpress/data": "^10.3.0",
 		"@wordpress/dom-ready": "^4.0.0",
 		"@wordpress/element": "^6.0.0",
 		"@wordpress/i18n": "^5.3.0",
 		"@wordpress/icons": "^10.3.0",
 		"lodash": "^4.17.21",
+		"@wordpress/notices": "^5.3.0",
 		"uuid": "^10.0.0"
 	}
 }

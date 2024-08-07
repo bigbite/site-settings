@@ -2,6 +2,8 @@ import { __ } from '@wordpress/i18n';
 import { Button, Flex, FlexItem } from '@wordpress/components';
 import { copy, trash } from '@wordpress/icons';
 import { useEffect, useMemo, useState } from '@wordpress/element';
+import { store as noticesStore } from '@wordpress/notices';
+import { useDispatch } from '@wordpress/data';
 import { cloneDeep, isEqual } from 'lodash';
 
 import { useSettings } from '../hooks';
@@ -12,6 +14,9 @@ const SettingsContainer = ( { category } ) => {
 	const categoryLowerCase = category.toLowerCase();
 	const { loading, settings, handleDeleteSetting, handleSaveSettings } =
 		useSettings();
+
+	const { createSuccessNotice, createErrorNotice } =
+		useDispatch( noticesStore );
 
 	const [ localSettings, setLocalSettings ] = useState( {} );
 
@@ -63,7 +68,6 @@ const SettingsContainer = ( { category } ) => {
 	 * Save the settings to the database
 	 */
 	async function handleSave() {
-		// BBMSK-19 Notifications
 		await handleSaveSettings( localSettings );
 	}
 
@@ -71,8 +75,28 @@ const SettingsContainer = ( { category } ) => {
 	 * Discard changes and reset the localSettings to the original settings
 	 */
 	function handleDiscard() {
-		// BBMSK-19 Notifications
 		setLocalSettings( cloneDeep( settings ) );
+
+		createSuccessNotice( __( 'Discarded changes', 'bb_site_settings' ), {
+			type: 'snackbar',
+		} );
+	}
+
+	/**
+	 * Copy the setting id to the clipboard
+	 *
+	 * @param {string} id - The id to copy to the clipboard
+	 */
+	function handleCopyId( id ) {
+		try {
+			window.navigator.clipboard.writeText( id );
+
+			createSuccessNotice( __( 'ID copied', 'bb_site_settings' ), {
+				type: 'snackbar',
+			} );
+		} catch ( error ) {
+			createErrorNotice( __( 'Could not copy ID', 'bb_site_settings' ) );
+		}
 	}
 
 	return (
@@ -126,12 +150,9 @@ const SettingsContainer = ( { category } ) => {
 												'bb_site_settings'
 											) }
 											icon={ copy }
-											onClick={ () => {
-												// BBMSK-19 Notifications
-												window.navigator.clipboard.writeText(
-													setting.id
-												);
-											} }
+											onClick={ () =>
+												handleCopyId( setting.id )
+											}
 										/>
 									</FlexItem>
 									<FlexItem>
@@ -147,7 +168,6 @@ const SettingsContainer = ( { category } ) => {
 											isDestructive
 											icon={ trash }
 											onClick={ () =>
-												// BBMSK-19 Notifications
 												handleDeleteSetting(
 													categoryLowerCase,
 													setting.id
