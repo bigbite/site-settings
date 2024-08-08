@@ -3,11 +3,13 @@ import {
 	ToggleControl,
 	RadioControl,
 	CheckboxControl,
+	ColorPicker,
 } from '@wordpress/components';
 import { v4 as uuidv4 } from 'uuid';
 import { __ } from '@wordpress/i18n';
 
 import CheckboxGroup from './CheckboxGroup';
+import Colors from './Colors';
 
 const LABELS = {
 	FIELD: __( 'Label for field', 'bb_site_settings' ),
@@ -158,6 +160,40 @@ const fieldConfigs = {
 					label: LABELS.OPTION_VALUE,
 					optionKey: 'value',
 					componentProp: 'value',
+				},
+			],
+		},
+	},
+	'color-palette': {
+		Component: Colors,
+		keyProp: 'value',
+		label: __( 'Color Palette', 'bb_site_settings' ),
+		attributes: {
+			label: 'Color Palette Label',
+			value: '',
+			colors: [
+				{ name: 'Red', color: '#f00', id: uuidv4() },
+				{ name: 'White', color: '#fff', id: uuidv4() },
+				{ name: 'Blue', color: '#00f', id: uuidv4() },
+			],
+		},
+		config: {
+			options: true,
+			optionsKey: 'colors',
+			optionsHeader: __( 'Color Options', 'bb_site_settings' ),
+			newOption: { label: '', color: '' },
+			controls: [
+				{
+					component: TextControl,
+					required: true,
+					label: __( 'Color Name', 'bb_site_settings' ),
+					optionKey: 'name',
+					componentProp: 'value',
+				},
+				{
+					component: ColorPicker,
+					optionKey: 'color',
+					componentProp: 'color',
 				},
 			],
 		},
