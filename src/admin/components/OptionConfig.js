@@ -12,44 +12,91 @@ import classNames from 'classnames';
 
 const OptionConfig = ( {
 	setting,
+	optionsKey = 'options',
 	handleAttributeChange,
 	optionsHeader,
-	config,
+	newOption,
+	controls,
 } ) => {
 	/**
-	 * Handles adding a new option to the setting
+	 * Add a new option to the options array, based on the
+	 * supplied newOption structure
+	 * Uses the optionsKey to determine which options array to update.
 	 */
 	const handleAddOption = () => {
-		const newOptions = setting?.options ? [ ...setting?.options ] : [];
-		newOptions.push( { ...config.newOption, id: uuidv4() } );
+		const newOptions = setting?.[ optionsKey ]
+			? [ ...setting[ optionsKey ] ]
+			: [];
+		newOptions.push( { ...newOption, id: uuidv4() } );
 
-		handleAttributeChange( 'options', newOptions );
+		handleAttributeChange( optionsKey, newOptions );
 	};
 
 	/**
-	 * Handles deleting an option from the setting
+	 * Delete an option from the options array.
+	 * Uses the optionsKey to determine which options array to update.
 	 *
-	 * @param {number} optionIndex - index of the option to delete
+	 * @param {number} optionIndex - The index of the option to delete
 	 */
 	const handleDeleteOption = ( optionIndex ) => {
-		const newOptions = [ ...setting?.options ];
+		const newOptions = [ ...setting[ optionsKey ] ];
 		newOptions.splice( optionIndex, 1 );
 
-		handleAttributeChange( 'options', newOptions );
+		handleAttributeChange( optionsKey, newOptions );
 	};
 
 	/**
-	 * Handles updating an option in the setting
+	 * Update an option in the options array.
+	 * Uses the optionsKey to determine which options array to update.
 	 *
-	 * @param {number} optionIndex - index of the option to update
-	 * @param {string} key         - key of the option to update
-	 * @param {*}      value       - value of the option to update
+	 * @param {number} optionIndex - The index of the option to update
+	 * @param {string} key         - The key of the option to update
+	 * @param {*}      value       - The value to update the option with
 	 */
 	const handleUpdateOption = ( optionIndex, key, value ) => {
-		const newOptions = [ ...setting?.options ];
+		const newOptions = [ ...setting[ optionsKey ] ];
 		newOptions[ optionIndex ][ key ] = value;
 
-		handleAttributeChange( 'options', newOptions );
+		handleAttributeChange( optionsKey, newOptions );
+	};
+
+	/**
+	 * Render the control component based on the control object
+	 * and set the correct props based on the option object
+	 * and the control object.
+	 *
+	 * @param {Object} control      - The control object
+	 * @param {Object} option       - The option object
+	 * @param {number} optionIndex  - The key of the option
+	 * @param {number} controlIndex - The key of the control
+	 *
+	 * @return {Component} - The control component with the correct props
+	 */
+	const renderControl = ( control, option, optionIndex, controlIndex ) => {
+		const Control = control.component;
+		/**
+		 * Dynamically set the prop based on the control componentProp,
+		 * getting the correct value from the option object.
+		 * E.g checked, value etc
+		 */
+		const dynamicProp = {
+			[ control.componentProp ]: option[ control.optionKey ],
+		};
+
+		return (
+			<Control
+				className={ classNames( {
+					'form-field--required': control.required,
+				} ) }
+				key={ `${ option.id }-${ controlIndex }` }
+				label={ control.label }
+				required={ control.required }
+				{ ...dynamicProp }
+				onChange={ ( value ) =>
+					handleUpdateOption( optionIndex, control.optionKey, value )
+				}
+			/>
+		);
 	};
 
 	return (
@@ -64,25 +111,25 @@ const OptionConfig = ( {
 				}
 			/>
 			<Panel header={ optionsHeader } className="field-config__option">
-				{ setting?.options &&
-					setting.options?.map( ( option, optionIndex ) => (
+				{ setting?.[ optionsKey ] &&
+					setting[ optionsKey ].map( ( option, optionIndex ) => (
 						<PanelBody
 							key={ option.id }
 							title={ __(
-								`Option Configuration`,
+								'Option Configuration',
 								'bb_site_settings'
 							) }
 						>
 							<PanelRow>
 								<h5 className="field-config__option-title">
 									{ __(
-										`Configuration`,
+										'Configuration',
 										'bb_site_settings'
 									) }
 								</h5>
 								<Button
 									label={ __(
-										`Delete Option`,
+										'Delete Option',
 										'bb_site_settings'
 									) }
 									isDestructive
@@ -93,39 +140,13 @@ const OptionConfig = ( {
 									}
 								/>
 							</PanelRow>
-							{ config.controls.map(
-								( control, controlIndex ) => {
-									const Control = control.type;
-									/**
-									 * Dynamically set the prop based on the control valueProp,
-									 * getting the correct value from the option object.
-									 * E.g checked, value etc
-									 */
-									const dynamicProp = {
-										[ control.valueProp ]:
-											option[ control.updateField ],
-									};
-
-									return (
-										<Control
-											className={ classNames( {
-												'form-field--required':
-													control.required,
-											} ) }
-											key={ `${ option.id }-${ controlIndex }` }
-											label={ control.label }
-											required={ control.required }
-											{ ...dynamicProp }
-											onChange={ ( value ) =>
-												handleUpdateOption(
-													optionIndex,
-													control.updateField,
-													value
-												)
-											}
-										/>
-									);
-								}
+							{ controls.map( ( control, controlIndex ) =>
+								renderControl(
+									control,
+									option,
+									optionIndex,
+									controlIndex
+								)
 							) }
 						</PanelBody>
 					) ) }
@@ -135,7 +156,7 @@ const OptionConfig = ( {
 				variant="secondary"
 				onClick={ handleAddOption }
 			>
-				{ __( `Add Option`, 'bb_site_settings' ) }
+				{ __( 'Add Option', 'bb_site_settings' ) }
 			</Button>
 		</>
 	);
