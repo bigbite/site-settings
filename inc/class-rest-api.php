@@ -59,13 +59,12 @@ class Rest_Api {
 
 		/**
 		 * Check if the provided category exists
-		 */
-		$target_category_values = $decoded_option[ $category ];
-
-		/**
+		 *
 		 * If the category doesn't exist, return null
 		 */
-		if ( ! $target_category_values ) {
+		if ( isset( $decoded_option[ $category ] ) ) {
+			$target_category_values = $decoded_option[ $category ];
+		} else {
 			return null;
 		}
 
