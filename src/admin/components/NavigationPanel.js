@@ -1,18 +1,14 @@
-import { Button } from '@wordpress/components';
-import { Icon } from '@wordpress/icons';
+import { Button, Icon } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 import { getNavigationCategoriesOptions } from '../schema';
+import { chevronRightSmall } from '@wordpress/icons';
 
-const NavigationPanel = ( {
-	activeCategory,
-	setActiveCategory,
-	showAddPanel,
-} ) => {
+const NavigationPanel = ( { activeCategory, setActiveCategory } ) => {
 	const categories = getNavigationCategoriesOptions();
 
 	return (
-		<div className="naviation-panel">
+		<div className="navigation-panel">
 			<div className="navigation-panel__body">
 				<h2>{ __( 'Site Settings', 'bb_site_settings' ) }</h2>
 				<p>
@@ -21,29 +17,38 @@ const NavigationPanel = ( {
 						'bb_site_settings'
 					) }
 				</p>
-				<ul>
+				<ul
+					aria-label={ __(
+						'Navigation Categories',
+						'bb_site_settings'
+					) }
+				>
 					{ categories.map( ( { id, label, icon } ) => (
 						<li key={ id }>
 							<Button
+								aria-selected={
+									activeCategory.toLowerCase() === id
+								}
 								onClick={ () => setActiveCategory( label ) }
 								variant={
 									activeCategory.toLowerCase() === id
 										? 'primary'
 										: 'tertiary'
 								}
-								icon={ <Icon icon={ icon } /> }
+								label={ `${ label } ${ __(
+									'Settings',
+									'bb_site_settings'
+								) }` }
 							>
-								{ label }
+								<span className="navigation-panel__button-label">
+									<Icon icon={ icon } />
+									{ label }
+								</span>
+								<Icon icon={ chevronRightSmall } />
 							</Button>
 						</li>
 					) ) }
 				</ul>
-			</div>
-
-			<div className="navigation-panel__footer">
-				<Button variant="primary" onClick={ showAddPanel }>
-					{ __( 'Add Setting', 'bb_site_settings' ) }
-				</Button>
 			</div>
 		</div>
 	);

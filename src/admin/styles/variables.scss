@@ -2,9 +2,5 @@
 	// Browser height minus top bar height
 	--site-settings-body-height: calc(100dvh - 32px);
 
-	// Panel height minus header height
-	--add-setting-panel-form-height: calc(100% - 82px);
-
-	// Settings body container height minus header height
-	--settings-body-container-height: calc(100% - 165px);
+	--site-settings-text-color: #6F6F6F;
 }

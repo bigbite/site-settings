@@ -48,10 +48,6 @@ const FieldConfigurator = ( { field, setting, setNewSetting } ) => {
 						<TextControl
 							className="form-field--required"
 							required
-							aria-label={ __(
-								'Label for new setting',
-								'bb_site_settings'
-							) }
 							label={ __(
 								'Label for field',
 								'bb_site_settings'
@@ -62,10 +58,6 @@ const FieldConfigurator = ( { field, setting, setNewSetting } ) => {
 							}
 						/>
 						<TextControl
-							aria-label={ __(
-								'Value for new setting',
-								'bb_site_settings'
-							) }
 							label={ __(
 								'Value for field',
 								'bb_site_settings'
@@ -118,6 +110,7 @@ const FieldConfigurator = ( { field, setting, setNewSetting } ) => {
 							controls: [
 								{
 									type: TextControl,
+									required: true,
 									label: __(
 										'Option Label',
 										'bb_site_settings'
@@ -152,6 +145,7 @@ const FieldConfigurator = ( { field, setting, setNewSetting } ) => {
 							controls: [
 								{
 									type: TextControl,
+									required: true,
 									label: __(
 										'Option Label',
 										'bb_site_settings'
