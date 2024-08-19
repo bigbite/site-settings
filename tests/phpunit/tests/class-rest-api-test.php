@@ -74,7 +74,6 @@ class Rest_Api_Test extends TestCase {
 		// Define testing variables
 		$test_category = 'general';
 		$test_value_ID = '1234567890';
-		$test_expected_value = 'API Testing';
 
 		// Test a null return if category doesn't exist
 		$this->assertNull($this->restApi->get_attributes('failedCategory', $test_value_ID));

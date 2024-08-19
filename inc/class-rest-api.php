@@ -35,11 +35,11 @@ class Rest_Api {
 	 * Get item from the options table.
 	 *
 	 * @param string $category Category of the setting.
-	 * @param string $id Id of the setting.
+	 * @param string $id Id of the setting. Valid IDs will be structured like so: 'ec66c3c8-d512-4ba2-94a4-2b5b3b96980d'
 	 *
-	 * @return array|null
+	 * @return array<mixed>|null
 	 */
-	private static function get_option_item( $category, $id ): array|null {
+	private static function get_option_item( string $category, string $id ): array|null {
 		/**
 		 * Return settings values from the options table
 		 */
@@ -91,7 +91,7 @@ class Rest_Api {
 	 *
 	 * @return mixed
 	 */
-	public static function get_value( $category, $id ): mixed {
+	public static function get_value( string $category, string $id ): mixed {
 		$item = self::get_option_item( $category, $id );
 
 		return $item ? $item['value'] : null;
@@ -105,7 +105,7 @@ class Rest_Api {
 	 *
 	 * @return mixed
 	 */
-	public static function get_attributes( $category, $id ): mixed {
+	public static function get_attributes( string $category, string $id ): mixed {
 		$item = self::get_option_item( $category, $id );
 
 		return $item ? $item['attributes'] : null;
