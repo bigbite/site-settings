@@ -25,3 +25,16 @@
 	align-items: center;
 	gap: 10px;
 }
+
+.navigation-panel__footer {
+	border-top: 1px solid #e5e5e5;
+	padding: 25px;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.navigation-panel__footer button {
+	justify-content: center;
+}
