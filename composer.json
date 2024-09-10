@@ -2,7 +2,9 @@
 	"require-dev": {
 		"bigbite/phpcs-config": "^2.0",
 		"phpstan/phpstan": "^1.11",
-		"szepeviktor/phpstan-wordpress": "^1.3"
+		"szepeviktor/phpstan-wordpress": "^1.3",
+		"phpunit/phpunit": "^9.6",
+		"brain/monkey": "2.6.1"
 	},
 	"require": {
 		"automattic/jetpack-autoloader": "^2.10.1"
@@ -25,9 +27,11 @@
 	"scripts": {
 		"phpcs": "./vendor/bin/phpcs --ignore=build/ .",
 		"phpstan": "./vendor/bin/phpstan analyse --memory-limit=640M",
+		"phpunit": "./vendor/bin/phpunit",
 		"pre-push": [
 			"@phpcs",
-			"@phpstan"
+			"@phpstan",
+			"@phpunit"
 		]
 	}
 }
